@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2023 Iconica
+# SPDX-FileCopyrightText: 2025 Iconica
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -10,10 +10,6 @@ publish_to: https://forgejo.internal.iconica.nl/api/packages/internal/pub
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
-
-dependencies:
-  flutter:
-    sdk: flutter
 
 dev_dependencies:
   flutter_iconica_analysis:

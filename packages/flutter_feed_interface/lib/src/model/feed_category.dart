@@ -1,48 +1,42 @@
-import "package:flutter/material.dart";
-
-@immutable
 class FeedCategory {
   const FeedCategory({
-    required this.key,
     required this.title,
-    this.icon,
-    this.canCreate = true,
-    this.canView = true,
+    this.id,
+    this.description,
   });
 
-  FeedCategory.fromJson(Map<String, dynamic> json)
-      : key = json["key"] as String?,
-        title = json["title"] as String,
-        icon = json["icon"] as Widget?,
-        canCreate = json["canCreate"] as bool? ?? true,
-        canView = json["canView"] as bool? ?? true;
+  factory FeedCategory.fromJson(String id, Map<String, dynamic> json) =>
+      FeedCategory(
+        id: id,
+        title: json["title"] as String,
+        description: json["description"] as String?,
+      );
 
-  final String? key;
+  /// The unique identifier of this category.
+  ///
+  /// If this is null it means the category hasn't been saved yet and exists
+  /// only in memory.
+  final String? id;
+
+  /// The title of this category.
   final String title;
-  final Widget? icon;
-  final bool canCreate;
-  final bool canView;
+
+  /// The description of this category.
+  final String? description;
 
   FeedCategory copyWith({
-    String? key,
+    String? id,
     String? title,
-    Widget? icon,
-    bool? canCreate,
-    bool? canView,
+    String? description,
   }) =>
       FeedCategory(
-        key: key ?? this.key,
+        id: id ?? this.id,
         title: title ?? this.title,
-        icon: icon ?? this.icon,
-        canCreate: canCreate ?? this.canCreate,
-        canView: canView ?? this.canView,
+        description: description ?? this.description,
       );
 
   Map<String, Object?> toJson() => {
-        "key": key,
         "title": title,
-        "icon": icon,
-        "canCreate": canCreate,
-        "canView": canView,
+        "description": description,
       };
 }

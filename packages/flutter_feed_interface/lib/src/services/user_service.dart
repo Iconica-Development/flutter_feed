@@ -5,5 +5,5 @@
 import "package:flutter_feed_interface/flutter_feed_interface.dart";
 
 mixin FeedUserService {
-  Future<FeedPosterUserModel?> getUser(String userId);
+  Future<FeedUserModel?> getUser(String userId);
 }

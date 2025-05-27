@@ -1,23 +1,20 @@
-// SPDX-FileCopyrightText: 2023 Iconica
+// SPDX-FileCopyrightText: 2025 Iconica
 //
 // SPDX-License-Identifier: BSD-3-Clause
 
-import "package:flutter/material.dart";
-
-@immutable
-class FeedPosterUserModel {
-  const FeedPosterUserModel({
+class FeedUserModel {
+  const FeedUserModel({
     required this.userId,
     this.firstName,
     this.lastName,
     this.imageUrl,
   });
 
-  factory FeedPosterUserModel.fromJson(
+  factory FeedUserModel.fromJson(
     Map<String, dynamic> json,
     String userId,
   ) =>
-      FeedPosterUserModel(
+      FeedUserModel(
         userId: userId,
         firstName: json["first_name"] as String?,
         lastName: json["last_name"] as String?,
