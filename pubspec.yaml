@@ -1,10 +1,10 @@
-# SPDX-FileCopyrightText: 2023 Iconica
+# SPDX-FileCopyrightText: 2025 Iconica
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-name: flutter_feed_workspace
+name: flutter_feed
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
+  sdk: '>=3.4.0 <4.0.0'
 dev_dependencies:
   melos: ^3.0.1

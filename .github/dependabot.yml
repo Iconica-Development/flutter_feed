@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2023 Iconica
+# SPDX-FileCopyrightText: 2025 Iconica
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,22 +6,16 @@ version: 2
 
 updates:
   - package-ecosystem: "pub"
-    directory: "/packages/flutter_feed"
+    directory: "/packages/flutter_feed_timeline"
+    schedule:
+      interval: "weekly"
+  
+  - package-ecosystem: "pub"
+    directory: "/packages/flutter_feed_timeline_interface"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "pub"
-    directory: "/packages/flutter_feed_firebase"
+    directory: "/packages/flutter_feed_utils"
     schedule:
       interval: "weekly"
-
-  - package-ecosystem: "pub"
-    directory: "/packages/flutter_feed_interface"
-    schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "pub"
-    directory: "/packages/flutter_feed_view"
-    schedule:
-      interval: "weekly"
-

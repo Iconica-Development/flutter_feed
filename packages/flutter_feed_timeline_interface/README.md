@@ -1,6 +1,7 @@
-# Flutter Feed
+# Flutter Feed Timeline Interface
 
-Flutter Feeds are multiple implementations of feed-like userstories.
+Flutter Feed Timeline Interface provides various models and datasource definitions used in the Flutter Feed Timeline repository.
+It's not meant to be used on it's own but in combination with one of it's implementations and `flutter_feed_timeline`.
 
 ## Issues
 
