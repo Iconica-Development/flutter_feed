@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-name: flutter_timeline
+name: flutter_feed
 
 packages:
   - packages/**
@@ -25,7 +25,7 @@ scripts:
     run: dart run melos exec -c 1 -- "flutter pub upgrade"
 
   create:
-    # run create in the example folder of flutter_timeline_view
+    # run create in the example folder of flutter_feed_view
     run: dart run melos exec --scope="*example*" -c 1 -- "flutter create ."
 
   analyze:

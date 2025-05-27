@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-name: flutter_timeline_workspace
+name: flutter_feed_workspace
 
 environment:
   sdk: '>=3.4.3 <4.0.0'

@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: 2023 Iconica
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+name: flutter_feed_view
+description: Visual elements of the Flutter Feed Component
+version: 0.1.0
+homepage: https://github.com/Iconica-Development/flutter_feed
+publish_to: https://forgejo.internal.iconica.nl/api/packages/internal/pub
+
+environment:
+  sdk: ">=3.4.3 <4.0.0"
+  flutter: '>=3.22.2'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  intl: ^0.19.0
+  cached_network_image: ^3.2.2
+  dotted_border: ^2.1.0
+  collection: ^1.18.0
+  flutter_svg: ^2.0.10+1
+  flutter_feed_interface:
+    hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
+    version: ^0.1.0
+  flutter_image_picker:
+    hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
+    version: ^4.0.0
+
+dev_dependencies:
+  flutter_iconica_analysis:
+    git:
+      url: https://github.com/Iconica-Development/flutter_iconica_analysis
+      ref: 7.0.0
+
+flutter:
+  assets:
+    - assets/
