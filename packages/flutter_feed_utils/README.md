@@ -1,6 +1,7 @@
-# Flutter Feed
+# Flutter Feed Utils
 
-Flutter Feeds are multiple implementations of feed-like userstories.
+Flutter Feed Utils provides various components used in feed-like pages.
+It's not meant to be used on it's own but is rather used by userstories like `flutter_feed_timeline`.
 
 ## Issues
 

@@ -1,0 +1,24 @@
+{
+    "@@locale": "en",
+    "timelineEmptyLabel": "No posts",
+    "@timelineEmptyLabel": {
+        "description": "Label shown when there are no posts to display in a timeline"
+    },
+    "timelinePostDeleteButtonText": "Delete",
+    "@timelinePostDeleteButtonText": {
+        "description": "Text of the button shown in the dropdown on a post in the timeline to delete an item"
+    },
+    "timelinePostLikeCount": "{count} likes",
+    "@timelinePostLikeCount": {
+        "description": "Label shown on the timeline indicating how many likes a post has",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "timelinePostViewButtonText": "View post",
+    "@timelinePostViewButtonText": {
+        "description": "Text of the button shown on posts to navigate to the detail view"
+    }
+}

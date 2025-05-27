@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2025 Iconica
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+include: package:flutter_iconica_analysis/analysis_options.yaml
+
+analyzer:
+  exclude: [lib/l10n/*.dart]
+  
+linter:
+  rules:

@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2023 Iconica
+# SPDX-FileCopyrightText: 2025 Iconica
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -23,10 +23,6 @@ scripts:
 
   upgrade:
     run: dart run melos exec -c 1 -- "flutter pub upgrade"
-
-  create:
-    # run create in the example folder of flutter_feed_view
-    run: dart run melos exec --scope="*example*" -c 1 -- "flutter create ."
 
   analyze:
     run: |
