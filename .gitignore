@@ -37,10 +37,10 @@ build/
 .metadata
 
 pubspec.lock
-packages/flutter_timeline/pubspec.lock
-packages/flutter_timeline_firebase/pubspec.lock
-packages/flutter_timeline_interface/pubspec.lock
-packages/flutter_timeline_view/pubspec.lock
+packages/flutter_feed/pubspec.lock
+packages/flutter_feed_firebase/pubspec.lock
+packages/flutter_feed_interface/pubspec.lock
+packages/flutter_feed_view/pubspec.lock
 
 pubspec_overrides.yaml
 

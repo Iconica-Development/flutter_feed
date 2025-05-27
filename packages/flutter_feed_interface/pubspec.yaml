@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: 2023 Iconica
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+name: flutter_feed_interface
+description: Interface for the service of the Flutter Feed component
+version: 0.1.0
+homepage: https://github.com/Iconica-Development/flutter_feed
+publish_to: https://forgejo.internal.iconica.nl/api/packages/internal/pub
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_iconica_analysis:
+    git:
+      url: https://github.com/Iconica-Development/flutter_iconica_analysis
+      ref: 7.0.0
