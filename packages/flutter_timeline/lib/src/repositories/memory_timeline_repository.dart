@@ -4,7 +4,7 @@
 
 import "dart:math";
 
-import "package:flutter_feed_timeline_interface/flutter_feed_timeline_interface.dart";
+import "package:flutter_timeline_interface/flutter_timeline_interface.dart";
 
 class _MemoryStorageSingleton {
   List<TimelineItem> items = const [];

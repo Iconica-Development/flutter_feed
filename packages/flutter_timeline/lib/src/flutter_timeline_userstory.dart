@@ -1,10 +1,10 @@
 import "dart:async";
 
 import "package:flutter/material.dart";
-import "package:flutter_feed_timeline/l10n/app_localizations.dart";
-import "package:flutter_feed_timeline/src/models/feed_configuration.dart";
-import "package:flutter_feed_timeline_interface/flutter_feed_timeline_interface.dart";
 import "package:flutter_feed_utils/flutter_feed_utils.dart";
+import "package:flutter_timeline/l10n/app_localizations.dart";
+import "package:flutter_timeline/src/models/configuration.dart";
+import "package:flutter_timeline_interface/flutter_timeline_interface.dart";
 
 class FlutterFeedTimelineUserstory extends StatefulWidget {
   const FlutterFeedTimelineUserstory({
@@ -12,7 +12,7 @@ class FlutterFeedTimelineUserstory extends StatefulWidget {
     super.key,
   });
 
-  final FeedTimelineUserStoryConfiguration configuration;
+  final TimelineUserStoryConfiguration configuration;
 
   @override
   State<FlutterFeedTimelineUserstory> createState() =>

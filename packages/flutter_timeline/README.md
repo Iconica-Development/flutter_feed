@@ -4,13 +4,13 @@ Flutter Timeline is a package which shows a list of posts by a user and it's par
 This package also has additional features like liking a post and leaving comments.
 
 ## Setup
-To use this package, add flutter_feed_timeline as a dependency in your pubspec.yaml file:
+To use this package, add flutter_timeline as a dependency in your pubspec.yaml file:
 
 ```
-  flutter_feed_timeline:
+  flutter_timeline:
     git: 
       url: https://github.com/Iconica-Development/flutter_feed.git
-      path: packages/flutter_feed_timeline
+      path: packages/flutter_timeline
 ```
 
 The package is a complete user story and as such expects localizations to be setup (it does provide it's own localizations).

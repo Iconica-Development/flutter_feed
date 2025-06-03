@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Iconica
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-name: flutter_feed_timeline
+name: flutter_timeline
 description: A timeline implementation of Flutter Feed
 version: 0.1.0
 homepage: https://github.com/Iconica-Development/flutter_feed
@@ -18,7 +18,7 @@ dependencies:
     sdk: flutter
   intl: any # Use the pinned version from flutter_localizations
 
-  flutter_feed_timeline_interface:
+  flutter_timeline_interface:
     hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
     version: ^0.1.0
   flutter_feed_utils:

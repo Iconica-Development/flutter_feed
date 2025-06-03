@@ -1,7 +1,7 @@
 # Flutter Feed Timeline Interface
 
 Flutter Feed Timeline Interface provides various models and datasource definitions used in the Flutter Feed Timeline repository.
-It's not meant to be used on it's own but in combination with one of it's implementations and `flutter_feed_timeline`.
+It's not meant to be used on it's own but in combination with one of it's implementations and `flutter_timeline`.
 
 ## Issues
 

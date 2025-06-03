@@ -3,15 +3,15 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
 import "package:flutter/material.dart";
-import "package:flutter_feed_timeline_interface/flutter_feed_timeline_interface.dart";
+import "package:flutter_timeline_interface/flutter_timeline_interface.dart";
 
 /// Configuration class for defining user-specific settings and callbacks for a
 /// feed user story.
 ///
 /// This class holds various parameters to customize the behavior and appearance
 /// of a feed user story.
-class FeedTimelineUserStoryConfiguration {
-  /// Constructs a [FeedTimelineUserStoryConfiguration] with the specified
+class TimelineUserStoryConfiguration {
+  /// Constructs a [TimelineUserStoryConfiguration] with the specified
   /// parameters.
   ///
   /// [timelineRepository] is the TimelineRepository responsible for fetching
@@ -21,7 +21,7 @@ class FeedTimelineUserStoryConfiguration {
   /// fetching user story data.
   ///
   /// [theme] is the app theme used for styling various elements.
-  const FeedTimelineUserStoryConfiguration({
+  const TimelineUserStoryConfiguration({
     required this.timelineRepository,
     required this.timelineLikesRepository,
     this.theme,
