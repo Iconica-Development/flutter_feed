@@ -10,3 +10,4 @@ export "package:flutter_timeline/l10n/app_localizations.dart";
 export "package:flutter_timeline/src/flutter_timeline_userstory.dart";
 export "package:flutter_timeline/src/models/configuration.dart";
 export "package:flutter_timeline/src/repositories/memory_timeline_repository.dart";
+export "package:flutter_timeline/src/services/timeline_service.dart";
