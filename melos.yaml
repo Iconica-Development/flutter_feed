@@ -6,6 +6,7 @@ name: flutter_feed
 
 packages:
   - packages/**
+  - packages/**/example
 
 command:
   version:
