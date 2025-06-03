@@ -25,7 +25,6 @@ dependencies:
     hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
     version: ^0.1.0
 
-  collection: ^1.18.0
 dev_dependencies:
   flutter_iconica_analysis:
     git:

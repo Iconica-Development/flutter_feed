@@ -17,12 +17,6 @@ dependencies:
     sdk: flutter
 
   cached_network_image: ^3.2.2
-  dotted_border: ">=2.1.0 <4.0.0"
-  collection: ^1.18.0
-  flutter_svg: ^2.0.10+1
-  flutter_image_picker:
-    hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
-    version: ^4.0.0
 
 dev_dependencies:
   flutter_iconica_analysis:
@@ -30,6 +24,3 @@ dev_dependencies:
       url: https://github.com/Iconica-Development/flutter_iconica_analysis
       ref: 7.0.0
 
-flutter:
-  assets:
-    - assets/
