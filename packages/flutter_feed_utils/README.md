@@ -1,7 +1,7 @@
 # Flutter Feed Utils
 
 Flutter Feed Utils provides various components used in feed-like pages.
-It's not meant to be used on it's own but is rather used by userstories like `flutter_feed_timeline`.
+It's not meant to be used on it's own but is rather used by userstories like `flutter_timeline`.
 
 ## Issues
 

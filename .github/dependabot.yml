@@ -6,12 +6,12 @@ version: 2
 
 updates:
   - package-ecosystem: "pub"
-    directory: "/packages/flutter_feed_timeline"
+    directory: "/packages/flutter_timeline"
     schedule:
       interval: "weekly"
   
   - package-ecosystem: "pub"
-    directory: "/packages/flutter_feed_timeline_interface"
+    directory: "/packages/flutter_timeline_interface"
     schedule:
       interval: "weekly"
 

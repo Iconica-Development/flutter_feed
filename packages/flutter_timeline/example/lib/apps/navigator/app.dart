@@ -1,6 +1,6 @@
 import "package:example/l10n/app_localizations.dart";
 import "package:flutter/material.dart";
-import "package:flutter_feed_timeline/flutter_feed_timeline.dart";
+import "package:flutter_timeline/flutter_timeline.dart";
 
 class NavigatorApp extends StatelessWidget {
   const NavigatorApp({super.key});
@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: FlutterFeedTimelineUserstory(
-          configuration: FeedTimelineUserStoryConfiguration(
+          configuration: TimelineUserStoryConfiguration(
             timelineRepository: MemoryFeedItemService(),
             timelineLikesRepository: MemoryTimelineLikesRepository(),
           ),

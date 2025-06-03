@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-name: flutter_feed_timeline_interface
+name: flutter_timeline_interface
 description: Service interfaces of the Flutter Feed Timeline repository
 version: 0.1.0
 homepage: https://github.com/Iconica-Development/flutter_feed

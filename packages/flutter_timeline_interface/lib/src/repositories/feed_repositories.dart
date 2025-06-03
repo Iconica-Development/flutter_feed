@@ -1,4 +1,4 @@
-import "package:flutter_feed_timeline_interface/src/models/timeline_item.dart";
+import "package:flutter_timeline_interface/src/models/timeline_item.dart";
 
 abstract class TimelineRepository {
   /// Fetch items from the datasource. It can accept a limit and offset for
