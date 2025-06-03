@@ -4,14 +4,17 @@ import "package:flutter/material.dart";
 import "package:flutter_feed_utils/flutter_feed_utils.dart";
 import "package:flutter_timeline/l10n/app_localizations.dart";
 import "package:flutter_timeline/src/models/configuration.dart";
+import "package:flutter_timeline/src/services/timeline_service.dart";
 import "package:flutter_timeline_interface/flutter_timeline_interface.dart";
 
 class FlutterFeedTimelineUserstory extends StatefulWidget {
   const FlutterFeedTimelineUserstory({
+    required this.service,
     required this.configuration,
     super.key,
   });
 
+  final TimelineService service;
   final TimelineUserStoryConfiguration configuration;
 
   @override
@@ -28,7 +31,7 @@ class _FlutterFeedTimelineUserstoryState
     isLoading = true;
     setState(() {});
 
-    items = await widget.configuration.timelineRepository.getItems();
+    items = await widget.service.getItems();
 
     isLoading = false;
     setState(() {});
@@ -45,10 +48,8 @@ class _FlutterFeedTimelineUserstoryState
   Widget build(BuildContext context) {
     var localizations = FlutterFeedLocalizations.of(context)!;
 
-    var likesRepository = widget.configuration.timelineLikesRepository;
-
     Future<void> likeItem(TimelineItem item) async {
-      await likesRepository.likeItem(item);
+      await widget.service.likeItem(item);
       unawaited(loadPosts());
     }
 

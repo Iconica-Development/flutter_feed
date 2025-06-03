@@ -37,10 +37,11 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: FlutterFeedTimelineUserstory(
-          configuration: TimelineUserStoryConfiguration(
-            timelineRepository: MemoryFeedItemService(),
-            timelineLikesRepository: MemoryTimelineLikesRepository(),
+          service: TimelineService(
+            repository: MemoryFeedItemService(),
+            likesRepository: MemoryTimelineLikesRepository(),
           ),
+          configuration: const TimelineUserStoryConfiguration(),
         ),
       );
 }
