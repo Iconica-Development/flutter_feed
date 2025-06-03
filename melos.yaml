@@ -38,3 +38,7 @@ scripts:
   format-check:
     run: dart run melos exec dart format . --set-exit-if-changed
     description: Run `flutter format` checks for all packages.
+
+  translate:
+    run: dart run melos exec -c 1 --file-exists="l10n.yaml" flutter gen-l10n
+    description: Run `flutter gen-l10n` for all packages.
