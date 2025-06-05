@@ -1,0 +1,10 @@
+repos:
+- repo: https://github.com/dluksza/flutter-analyze-pre-commit
+  rev: 4afcaa82fc368d40d486256bf4edba329bf667bb
+  hooks:
+  - id: dart-format
+    args:
+      - packages/flutter_feed_utils/lib/*
+      - packages/flutter_timeline/lib/*
+      - packages/flutter_timeline/example/lib/*
+      - packages/flutter_timeline_interface/lib/*
