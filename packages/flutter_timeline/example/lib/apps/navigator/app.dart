@@ -17,8 +17,24 @@ class NavigatorApp extends StatelessWidget {
           colorScheme:
               ColorScheme.fromSeed(seedColor: Colors.deepPurple).copyWith(
             surface: const Color(0xFFB8E2E8),
+            onSurface: const Color(0xFF212121),
+            onTertiary: const Color(0xFF9E9E9E),
           ),
           useMaterial3: true,
+          textTheme: const TextTheme(
+            labelSmall: TextStyle(
+              fontWeight: FontWeight.w300,
+              fontSize: 12.0,
+            ),
+            bodySmall: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 14.0,
+            ),
+            titleSmall: TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: 14.0,
+            ),
+          ),
         ),
         home: const MyHomePage(),
       );
@@ -35,13 +51,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: FlutterFeedTimelineUserstory(
-          service: TimelineService(
-            repository: MemoryFeedItemService(),
-            likesRepository: MemoryTimelineLikesRepository(),
-          ),
-          configuration: const TimelineUserStoryConfiguration(),
+  Widget build(BuildContext context) => FlutterFeedTimelineUserstory(
+        service: TimelineService(
+          repository: MemoryFeedItemService(),
+          likesRepository: MemoryTimelineLikesRepository(),
         ),
+        configuration: const TimelineUserStoryConfiguration(),
       );
 }
