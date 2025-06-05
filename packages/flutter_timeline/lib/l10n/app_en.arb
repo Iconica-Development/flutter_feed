@@ -20,5 +20,19 @@
     "timelinePostViewButtonText": "View post",
     "@timelinePostViewButtonText": {
         "description": "Text of the button shown on posts to navigate to the detail view"
+    },
+    "timelinePostDetailDate": "{date} at {time}",
+    "@timelinePostDetailDate": {
+        "description": "Label shown on the detail of a post indicating the author date",
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "yMd"
+            },
+            "time": {
+                "type": "DateTime",
+                "format": "Hm"
+            }
+        }
     }
 }

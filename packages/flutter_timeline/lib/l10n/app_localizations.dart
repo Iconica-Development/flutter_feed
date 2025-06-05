@@ -116,6 +116,12 @@ abstract class FlutterFeedLocalizations {
   /// In en, this message translates to:
   /// **'View post'**
   String get timelinePostViewButtonText;
+
+  /// Label shown on the detail of a post indicating the author date
+  ///
+  /// In en, this message translates to:
+  /// **'{date} at {time}'**
+  String timelinePostDetailDate(DateTime date, DateTime time);
 }
 
 class _FlutterFeedLocalizationsDelegate

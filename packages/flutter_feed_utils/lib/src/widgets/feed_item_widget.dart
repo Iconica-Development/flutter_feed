@@ -8,36 +8,40 @@ import "package:flutter/material.dart";
 class FeedViewItem extends StatelessWidget {
   const FeedViewItem({
     required this.title,
-    required this.onTap,
-    required this.localizationLikeCount,
-    required this.localizationViewItemButtonText,
     required this.localizationDeleteItemButtonText,
+    this.localizationLikeCount,
+    this.localizationAuthorDate,
+    this.localizationViewItemButtonText,
     this.authorAvatarUrl,
     this.authorName,
-    this.likeCount,
     this.content,
     this.imageUrl,
     this.actionBuilder,
+    this.onTap,
     this.onUserTap,
     super.key,
-  });
+  }) : assert(
+          onTap == null || localizationViewItemButtonText != null,
+          "When onTap is given a localized text for the button should be "
+          "present",
+        );
 
   final String? authorAvatarUrl;
   final String? authorName;
-  final int? likeCount;
   final String title;
   final String? content;
   final String? imageUrl;
 
   final Widget Function()? actionBuilder;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   /// If this is not null, the user can tap on the user avatar or name.
   /// It will only be used when [authorAvatarUrl] is not null.
   final Function(String userId)? onUserTap;
 
-  final String localizationLikeCount;
-  final String localizationViewItemButtonText;
+  final String? localizationAuthorDate;
+  final String? localizationLikeCount;
+  final String? localizationViewItemButtonText;
   final String localizationDeleteItemButtonText;
 
   @override
@@ -65,12 +69,13 @@ class FeedViewItem extends StatelessWidget {
           const SizedBox(height: 8.0),
           _PostInfo(
             authorName: authorName,
-            content: title,
-            likeCount: likeCount,
+            title: title,
+            content: content,
             actionBuilder: actionBuilder,
             onTap: onTap,
             localizationLikeCount: localizationLikeCount,
             localizationViewItemButtonText: localizationViewItemButtonText,
+            localizationAuthorDate: localizationAuthorDate,
           ),
         ],
       );
@@ -119,7 +124,9 @@ class _PostHeader extends StatelessWidget {
           Expanded(
             child: Text(
               authorName,
-              style: theme.textTheme.titleSmall,
+              style: theme.textTheme.titleSmall?.copyWith(
+                color: theme.colorScheme.onSurface,
+              ),
             ),
           ),
           if (allowDeletion) ...[
@@ -144,21 +151,23 @@ class _PostInfo extends StatelessWidget {
   const _PostInfo({
     required this.localizationLikeCount,
     required this.localizationViewItemButtonText,
-    this.likeCount,
+    this.localizationAuthorDate,
     this.authorName,
+    this.title,
     this.content,
     this.actionBuilder,
     this.onTap,
   });
 
-  final int? likeCount;
   final String? authorName;
+  final String? title;
   final String? content;
   final Widget Function()? actionBuilder;
   final VoidCallback? onTap;
 
-  final String localizationLikeCount;
-  final String localizationViewItemButtonText;
+  final String? localizationAuthorDate;
+  final String? localizationLikeCount;
+  final String? localizationViewItemButtonText;
 
   @override
   Widget build(BuildContext context) {
@@ -167,36 +176,61 @@ class _PostInfo extends StatelessWidget {
     var likeCountText = localizationLikeCount;
     var viewItemText = localizationViewItemButtonText;
 
+    var styleTitleSmall = theme.textTheme.titleSmall?.copyWith(
+      color: theme.colorScheme.onSurface,
+    );
+    var styleBodySmall = theme.textTheme.bodySmall?.copyWith(
+      color: theme.colorScheme.onSurface,
+    );
+    var styleLabelSmall = theme.textTheme.labelSmall?.copyWith(
+      color: theme.colorScheme.onSurface,
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (actionBuilder != null) ...[
           actionBuilder!.call(),
         ],
-        if (likeCount != null) ...[
+        if (likeCountText != null) ...[
           Text(
             likeCountText,
-            style: theme.textTheme.titleSmall,
+            style: styleTitleSmall,
           ),
         ],
-        if (authorName != null || content != null) ...[
+        if (authorName != null || title != null) ...[
           const SizedBox(height: 4.0),
           Wrap(
             children: [
               if (authorName != null) ...[
                 Text(
                   authorName!,
-                  style: theme.textTheme.titleSmall,
+                  style: styleTitleSmall,
                 ),
                 const SizedBox(width: 8.0),
               ],
-              if (content != null) ...[
+              if (title != null) ...[
                 Text(
-                  content!,
-                  style: theme.textTheme.bodySmall,
+                  title!,
+                  style: styleBodySmall,
                 ),
               ],
             ],
+          ),
+        ],
+        if (content != null) ...[
+          const SizedBox(height: 16.0),
+          Text(
+            content!,
+            style: styleBodySmall,
+          ),
+        ],
+        if (localizationAuthorDate != null) ...[
+          Text(
+            localizationAuthorDate!,
+            style: styleLabelSmall?.copyWith(
+              color: theme.colorScheme.onTertiary,
+            ),
           ),
         ],
         if (onTap != null) ...[
@@ -204,8 +238,10 @@ class _PostInfo extends StatelessWidget {
           InkWell(
             onTap: onTap,
             child: Text(
-              viewItemText,
-              style: theme.textTheme.titleSmall?.copyWith(color: Colors.grey),
+              viewItemText!,
+              style: styleTitleSmall?.copyWith(
+                color: theme.colorScheme.onTertiary,
+              ),
             ),
           ),
         ],

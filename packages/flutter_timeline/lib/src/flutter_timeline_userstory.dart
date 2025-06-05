@@ -5,6 +5,7 @@ import "package:flutter_feed_utils/flutter_feed_utils.dart";
 import "package:flutter_timeline/l10n/app_localizations.dart";
 import "package:flutter_timeline/src/models/configuration.dart";
 import "package:flutter_timeline/src/services/timeline_service.dart";
+import "package:flutter_timeline/src/views/detail_view.dart";
 import "package:flutter_timeline_interface/flutter_timeline_interface.dart";
 
 class FlutterFeedTimelineUserstory extends StatefulWidget {
@@ -47,27 +48,28 @@ class _FlutterFeedTimelineUserstoryState
   @override
   Widget build(BuildContext context) {
     var localizations = FlutterFeedLocalizations.of(context)!;
+    var navigator = Navigator.of(context);
 
     Future<void> likeItem(TimelineItem item) async {
       await widget.service.likeItem(item);
       unawaited(loadPosts());
     }
 
-    return Theme(
-      data: widget.configuration.theme ??
-          ThemeData(
-            textTheme: const TextTheme(
-              bodySmall: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 14,
-              ),
-              titleSmall: TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 14,
-              ),
-            ),
+    Future<void> onItemPressed(TimelineItem item) async {
+      await navigator.push(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => DetailView(
+            service: widget.service,
+            configuration: widget.configuration,
+            itemId: item.id,
           ),
-      child: SingleChildScrollView(
+        ),
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(),
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -79,9 +81,7 @@ class _FlutterFeedTimelineUserstoryState
                   title: item.title,
                   authorName: item.authorName,
                   authorAvatarUrl: item.authorAvatarUrl,
-                  content: item.title,
                   imageUrl: item.media.isNotEmpty ? item.media.first : null,
-                  likeCount: item.likeCount,
                   localizationDeleteItemButtonText:
                       localizations.timelinePostDeleteButtonText,
                   localizationLikeCount:
@@ -104,7 +104,7 @@ class _FlutterFeedTimelineUserstoryState
                       ),
                     ],
                   ),
-                  onTap: () {},
+                  onTap: () async => onItemPressed(item),
                 ),
               ),
             ],
