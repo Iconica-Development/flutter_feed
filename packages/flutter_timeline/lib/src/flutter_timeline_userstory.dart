@@ -69,55 +69,48 @@ class _FlutterFeedTimelineUserstoryState
 
     return Scaffold(
       appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (var item in items) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: FeedViewItem(
-                  title: item.title,
-                  authorName: item.authorName,
-                  authorAvatarUrl: item.authorAvatarUrl,
-                  imageUrl: item.media.isNotEmpty ? item.media.first : null,
-                  localizationDeleteItemButtonText:
-                      localizations.timelinePostDeleteButtonText,
-                  localizationLikeCount:
-                      localizations.timelinePostLikeCount(item.likeCount),
-                  localizationViewItemButtonText:
-                      localizations.timelinePostViewButtonText,
-                  actionBuilder: () => Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        onPressed: () async => likeItem(item),
-                        icon: Icon(
-                          item.likedByUser
-                              ? Icons.favorite_rounded
-                              : Icons.favorite_outline_rounded,
-                        ),
-                      ),
-                    ],
+      body: OverviewLayout.list(
+        children: [
+          for (var item in items) ...[
+            FeedViewItem(
+              title: item.title,
+              authorName: item.authorName,
+              authorAvatarUrl: item.authorAvatarUrl,
+              imageUrl: item.media.isNotEmpty ? item.media.first : null,
+              localizationDeleteItemButtonText:
+                  localizations.timelinePostDeleteButtonText,
+              localizationLikeCount:
+                  localizations.timelinePostLikeCount(item.likeCount),
+              localizationViewItemButtonText:
+                  localizations.timelinePostViewButtonText,
+              actionBuilder: () => Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () async => likeItem(item),
+                    icon: Icon(
+                      item.likedByUser
+                          ? Icons.favorite_rounded
+                          : Icons.favorite_outline_rounded,
+                    ),
                   ),
-                  onTap: () async => onItemPressed(item),
-                ),
+                ],
               ),
-            ],
-            if (items.isEmpty) ...[
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(localizations.timelineEmptyLabel),
-                ),
-              ),
-            ],
+              onTap: () async => onItemPressed(item),
+            ),
           ],
-        ),
+          if (items.isEmpty) ...[
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(localizations.timelineEmptyLabel),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
