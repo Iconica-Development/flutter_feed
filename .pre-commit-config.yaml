@@ -4,6 +4,7 @@ repos:
   hooks:
   - id: dart-format
     args:
+      - packages/dart_feed_utils/lib/*
       - packages/flutter_feed_utils/lib/*
       - packages/flutter_timeline/lib/*
       - packages/flutter_timeline/example/lib/*
