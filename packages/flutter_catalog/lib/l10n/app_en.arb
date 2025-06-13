@@ -1,0 +1,21 @@
+{
+    "@@locale": "en",
+    "overviewTitle": "Toys near you",
+    "filtersTitle": "Filters",
+    "searchHint": "Find toys...",
+    "filterButton": "Filters",
+    "noItemsFound": "No items found.",
+    "itemLoadingError": "Failed to load items.",
+    "detailDescriptionTitle": "Description",
+    "applyFiltersButton": "Apply filters",
+    "sendMessageButton": "Send message",
+    "characteristicsTitle": "Characteristics",
+    "distanceTitle": "Distance",
+    "postedSince": "Posted since {date}",
+    "@postedSince": {
+        "description": "Indicates how long ago the item was posted, formatted as a relative date.",
+        "placeholders": {
+            "date": {}
+        }
+    }
+}

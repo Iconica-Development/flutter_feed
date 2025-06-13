@@ -7,10 +7,10 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
 
-/// Callers can lookup localized strings with an instance of FlutterFeedLocalizations
-/// returned by `FlutterFeedLocalizations.of(context)`.
+/// Callers can lookup localized strings with an instance of FlutterCatalogLocalizations
+/// returned by `FlutterCatalogLocalizations.of(context)`.
 ///
-/// Applications need to include `FlutterFeedLocalizations.delegate()` in their app's
+/// Applications need to include `FlutterCatalogLocalizations.delegate()` in their app's
 /// `localizationDelegates` list, and the locales they support in the app's
 /// `supportedLocales` list. For example:
 ///
@@ -18,8 +18,8 @@ import 'app_localizations_en.dart';
 /// import 'l10n/app_localizations.dart';
 ///
 /// return MaterialApp(
-///   localizationsDelegates: FlutterFeedLocalizations.localizationsDelegates,
-///   supportedLocales: FlutterFeedLocalizations.supportedLocales,
+///   localizationsDelegates: FlutterCatalogLocalizations.localizationsDelegates,
+///   supportedLocales: FlutterCatalogLocalizations.supportedLocales,
 ///   home: MyApplicationHome(),
 /// );
 /// ```
@@ -56,21 +56,21 @@ import 'app_localizations_en.dart';
 /// Select and expand the newly-created Localizations item then, for each
 /// locale your application supports, add a new item and select the locale
 /// you wish to add from the pop-up menu in the Value field. This list should
-/// be consistent with the languages listed in the FlutterFeedLocalizations.supportedLocales
+/// be consistent with the languages listed in the FlutterCatalogLocalizations.supportedLocales
 /// property.
-abstract class FlutterFeedLocalizations {
-  FlutterFeedLocalizations(String locale)
+abstract class FlutterCatalogLocalizations {
+  FlutterCatalogLocalizations(String locale)
       : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
-  static FlutterFeedLocalizations? of(BuildContext context) {
-    return Localizations.of<FlutterFeedLocalizations>(
-        context, FlutterFeedLocalizations);
+  static FlutterCatalogLocalizations? of(BuildContext context) {
+    return Localizations.of<FlutterCatalogLocalizations>(
+        context, FlutterCatalogLocalizations);
   }
 
-  static const LocalizationsDelegate<FlutterFeedLocalizations> delegate =
-      _FlutterFeedLocalizationsDelegate();
+  static const LocalizationsDelegate<FlutterCatalogLocalizations> delegate =
+      _FlutterCatalogLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -93,45 +93,87 @@ abstract class FlutterFeedLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[Locale('en')];
 
-  /// Label shown when there are no posts to display in a timeline
+  /// No description provided for @overviewTitle.
   ///
   /// In en, this message translates to:
-  /// **'No posts'**
-  String get timelineEmptyLabel;
+  /// **'Toys near you'**
+  String get overviewTitle;
 
-  /// Text of the button shown in the dropdown on a post in the timeline to delete an item
+  /// No description provided for @filtersTitle.
   ///
   /// In en, this message translates to:
-  /// **'Delete'**
-  String get timelinePostDeleteButtonText;
+  /// **'Filters'**
+  String get filtersTitle;
 
-  /// Label shown on the timeline indicating how many likes a post has
+  /// No description provided for @searchHint.
   ///
   /// In en, this message translates to:
-  /// **'{count} likes'**
-  String timelinePostLikeCount(int count);
+  /// **'Find toys...'**
+  String get searchHint;
 
-  /// Text of the button shown on posts to navigate to the detail view
+  /// No description provided for @filterButton.
   ///
   /// In en, this message translates to:
-  /// **'View post'**
-  String get timelinePostViewButtonText;
+  /// **'Filters'**
+  String get filterButton;
 
-  /// Label shown on the detail of a post indicating the author date
+  /// No description provided for @noItemsFound.
   ///
   /// In en, this message translates to:
-  /// **'{date} at {time}'**
-  String timelinePostDetailDate(DateTime date, DateTime time);
+  /// **'No items found.'**
+  String get noItemsFound;
+
+  /// No description provided for @itemLoadingError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load items.'**
+  String get itemLoadingError;
+
+  /// No description provided for @detailDescriptionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get detailDescriptionTitle;
+
+  /// No description provided for @applyFiltersButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply filters'**
+  String get applyFiltersButton;
+
+  /// No description provided for @sendMessageButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send message'**
+  String get sendMessageButton;
+
+  /// No description provided for @characteristicsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Characteristics'**
+  String get characteristicsTitle;
+
+  /// No description provided for @distanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get distanceTitle;
+
+  /// Indicates how long ago the item was posted, formatted as a relative date.
+  ///
+  /// In en, this message translates to:
+  /// **'Posted since {date}'**
+  String postedSince(Object date);
 }
 
-class _FlutterFeedLocalizationsDelegate
-    extends LocalizationsDelegate<FlutterFeedLocalizations> {
-  const _FlutterFeedLocalizationsDelegate();
+class _FlutterCatalogLocalizationsDelegate
+    extends LocalizationsDelegate<FlutterCatalogLocalizations> {
+  const _FlutterCatalogLocalizationsDelegate();
 
   @override
-  Future<FlutterFeedLocalizations> load(Locale locale) {
-    return SynchronousFuture<FlutterFeedLocalizations>(
-        lookupFlutterFeedLocalizations(locale));
+  Future<FlutterCatalogLocalizations> load(Locale locale) {
+    return SynchronousFuture<FlutterCatalogLocalizations>(
+        lookupFlutterCatalogLocalizations(locale));
   }
 
   @override
@@ -139,18 +181,18 @@ class _FlutterFeedLocalizationsDelegate
       <String>['en'].contains(locale.languageCode);
 
   @override
-  bool shouldReload(_FlutterFeedLocalizationsDelegate old) => false;
+  bool shouldReload(_FlutterCatalogLocalizationsDelegate old) => false;
 }
 
-FlutterFeedLocalizations lookupFlutterFeedLocalizations(Locale locale) {
+FlutterCatalogLocalizations lookupFlutterCatalogLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en':
-      return FlutterFeedLocalizationsEn();
+      return FlutterCatalogLocalizationsEn();
   }
 
   throw FlutterError(
-      'FlutterFeedLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'FlutterCatalogLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
       'an issue with the localizations generation tool. Please file an issue '
       'on GitHub with a reproducible sample app and the gen-l10n configuration '
       'that was used.');

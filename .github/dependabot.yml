@@ -11,6 +11,16 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: "pub"
+    directory: "/packages/flutter_catalog"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pub"
+    directory: "/packages/flutter_catalog_interface"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pub"
     directory: "/packages/flutter_feed_utils"
     schedule:
       interval: "weekly"
