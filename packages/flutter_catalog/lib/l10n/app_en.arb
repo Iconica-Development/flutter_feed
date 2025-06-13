@@ -1,0 +1,11 @@
+{
+    "@@locale": "en",
+    "overviewTitle": "Toys near you",
+    "filtersTitle": "Filters",
+    "searchHint": "Find toys...",
+    "filterButton": "Filters",
+    "noItemsFound": "No items found.",
+    "itemLoadingError": "Failed to load items.",
+    "detailDescriptionTitle": "Description",
+    "applyFiltersButton": "Apply filters"
+}
