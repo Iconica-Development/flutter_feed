@@ -11,6 +11,12 @@ packages:
 command:
   version:
     branch: master
+  bootstrap:
+    hooks:
+      post: |
+        dart run melos exec -c 1 -- "flutter pub get"
+        dart run melos exec -c 1 --file-exists="l10n.yaml" flutter gen-l10n
+        dart run melos exec -c 1 --file-exists="l10n.yaml" dart format lib/l10n
 
 scripts:
   lint:all:
