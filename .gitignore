@@ -54,6 +54,3 @@ pubspec_overrides.yaml
 
 # FVM Version Cache
 .fvm/
-
-# generated localization files
-app_localizations*.dart
