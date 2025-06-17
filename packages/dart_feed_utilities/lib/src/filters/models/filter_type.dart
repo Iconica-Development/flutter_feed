@@ -62,6 +62,9 @@ abstract interface class FilterModel<T> {
       BooleanSelectFilter.filterType => BooleanSelectFilter(
           filterModel: innerModel,
         ),
+      TextFilter.filterType => TextFilter(
+          filterModel: innerModel,
+        ),
       _ => innerModel,
     };
   }
@@ -336,4 +339,54 @@ class BooleanSelectFilter implements FilterModel<bool> {
   @override
   // ignore: avoid_annotating_with_dynamic
   bool validateValue(dynamic value) => value is bool;
+}
+
+/// A filter for text input
+class TextFilter implements FilterModel<String> {
+  /// Creates a text filter based on the internal filter model.
+  const TextFilter({
+    required this.filterModel,
+  });
+
+  /// The type of filter this is
+  static const String filterType = "text";
+
+  /// The inner filter model
+  final BaseFilterModel filterModel;
+
+  @override
+  String get id => filterModel.id;
+
+  @override
+  Uri get imageUrl => filterModel.imageUrl;
+
+  @override
+  Map<String, dynamic> get metadata => filterModel.metadata;
+
+  @override
+  String get name => filterModel.name;
+
+  @override
+  String get type => filterModel.type;
+
+  @override
+  String get key => filterModel.key;
+
+  @override
+  // ignore: avoid_annotating_with_dynamic
+  String deserializeValue(dynamic serialized) {
+    var deserialized = filterModel.deserializeValue(serialized);
+    if (deserialized is! String) {
+      return "";
+    }
+
+    return deserialized;
+  }
+
+  @override
+  dynamic serializeValue(String value) => filterModel.serializeValue(value);
+
+  @override
+  // ignore: avoid_annotating_with_dynamic
+  bool validateValue(dynamic value) => value is String;
 }

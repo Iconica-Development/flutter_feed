@@ -12,6 +12,14 @@ class FilterMemoryRepository implements FilterRepository {
       FilterModel.keys.type: BooleanSelectFilter.filterType,
       FilterModel.keys.metadata: {},
     },
+    "search": <String, dynamic>{
+      FilterModel.keys.id: "search",
+      FilterModel.keys.key: "q",
+      FilterModel.keys.name: "Search",
+      FilterModel.keys.imageUrl: "https://picsum.photos/seed/search/200",
+      FilterModel.keys.type: TextFilter.filterType,
+      FilterModel.keys.metadata: {},
+    },
     "range": <String, dynamic>{
       FilterModel.keys.id: "range",
       FilterModel.keys.key: "age",
