@@ -1,0 +1,43 @@
+name: flutter_catalog
+description: A catalog implementation of Flutter Feed.
+version: 0.1.0
+homepage: https://github.com/Iconica-Development/flutter_feed
+publish_to: https://forgejo.internal.iconica.nl/api/packages/internal/pub
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
+
+dependencies:
+  # Core
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+
+  # Utilities
+  cached_network_image: ^3.3.0
+  flutter_hooks: ">=0.18.0 <1.0.0"
+
+  # Internal packages
+  flutter_catalog_interface:
+    hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
+    version: ^0.1.0
+  dart_feed_utilities:
+    hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
+    version: ^0.1.0
+  flutter_feed_utils:
+    hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
+    version: ^0.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_iconica_analysis:
+    hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
+    version: ^7.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
