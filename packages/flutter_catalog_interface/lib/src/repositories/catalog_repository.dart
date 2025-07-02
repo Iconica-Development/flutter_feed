@@ -3,6 +3,12 @@ import "package:flutter_catalog_interface/src/models/lat_lng.dart";
 
 /// The interface for interacting with the catalog.
 abstract class CatalogRepository {
+
+  /// Creates a new catalog item.
+  ///
+  /// [item] is a map representing the item to be created.
+  Future<void> createCatalogItem(Map<String, dynamic> item);
+
   /// Fetches a list of catalog items.
   ///
   /// [userId] is required for personalized results or distance calculations.

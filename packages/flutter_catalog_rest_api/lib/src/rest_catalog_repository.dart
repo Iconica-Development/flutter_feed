@@ -20,6 +20,7 @@ class RestCatalogRepository extends HttpApiService<List<CatalogItem>>
     super.client,
     super.defaultHeaders,
     this.apiPrefix = "",
+    this.createCatalogItemEndpoint = "/catalog/catalog-items",
     this.fetchCatalogItemsEndpoint = "/catalog/catalog-items",
     this.fetchCatalogItemByIdEndpoint = "/catalog/catalog-items/:id",
     this.toggleFavoriteEndpoint = "/catalog/catalog-items/:itemId/favorite",
@@ -27,6 +28,9 @@ class RestCatalogRepository extends HttpApiService<List<CatalogItem>>
 
   /// The prefix for the API endpoints.
   final String apiPrefix;
+
+  /// Endpoint for creating a catalog item.
+  final String createCatalogItemEndpoint;
 
   /// Endpoint for fetching catalog items.
   final String fetchCatalogItemsEndpoint;
@@ -38,6 +42,24 @@ class RestCatalogRepository extends HttpApiService<List<CatalogItem>>
   final String toggleFavoriteEndpoint;
 
   Endpoint get _baseEndpoint => endpoint(apiPrefix);
+
+  @override
+  Future<void> createCatalogItem(Map<String, dynamic> item) async {
+    var createEndpoint =
+        _baseEndpoint.child(createCatalogItemEndpoint).authenticate();
+
+    try {
+      await createEndpoint.post(requestModel: item);
+    } on ApiException {
+      rethrow;
+    } on Exception catch (e, s) {
+      throw ApiException(
+        inner: http.Response("Unexpected error: $e", 500),
+        error: e,
+        stackTrace: s,
+      );
+    }
+  }
 
   @override
   Future<List<CatalogItem>> fetchCatalogItems({

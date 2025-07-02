@@ -1,7 +1,7 @@
 import "dart:math";
 import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 
-/// An in-memory implementation of the [CatalogInterface].
+/// An in-memory implementation of the [CatalogRepository].
 ///
 /// Used for demonstration and testing purposes. It simulates data fetching
 /// and basic operations for catalog items, including per-user favorites
@@ -14,8 +14,6 @@ class MemoryCatalogRepository implements CatalogRepository {
       description: "A soft and cuddly teddy bear for all ages.",
       price: 3.00,
       authorId: "author_vic",
-      authorName: "Victor",
-      authorProfileImageUrl: "https://picsum.photos/id/1005/50/50",
       location: const LatLng(latitude: 51.980, longitude: 5.910),
       imageUrls: const ["https://picsum.photos/seed/teddy/200/300"],
       postedAt: DateTime.now().subtract(const Duration(days: 5)),
@@ -29,8 +27,6 @@ class MemoryCatalogRepository implements CatalogRepository {
           "labore et dolore magna.",
       price: 0.00,
       authorId: "author_mar",
-      authorName: "Martijn",
-      authorProfileImageUrl: "https://picsum.photos/id/1011/50/50",
       location: const LatLng(latitude: 51.985, longitude: 5.914),
       imageUrls: const ["https://picsum.photos/seed/train/200/300"],
       postedAt: DateTime(2025, 6, 2),
@@ -41,72 +37,9 @@ class MemoryCatalogRepository implements CatalogRepository {
       description: "Large set of colorful Lego blocks for creative building.",
       price: 0.00,
       authorId: "author_jan",
-      authorName: "Janneke",
-      authorProfileImageUrl: "https://picsum.photos/id/1012/50/50",
       location: const LatLng(latitude: 51.975, longitude: 5.920),
       imageUrls: const ["https://picsum.photos/seed/lego/200/300"],
       postedAt: DateTime.now().subtract(const Duration(days: 10)),
-    ),
-    CatalogItem(
-      id: "4",
-      title: "Playmobil paard",
-      description:
-          "Playmobil horse with accessories, perfect for imaginative play.",
-      price: 0.00,
-      authorId: "author_eli",
-      authorName: "Elisa",
-      authorProfileImageUrl: "https://picsum.photos/id/1015/50/50",
-      location: const LatLng(latitude: 51.990, longitude: 5.905),
-      imageUrls: const ["https://picsum.photos/seed/playmobil/200/300"],
-      postedAt: DateTime.now().subtract(const Duration(hours: 12)),
-    ),
-    CatalogItem(
-      id: "5",
-      title: "Fiets",
-      description: "Adult's bicycle, well-maintained and ready to ride.",
-      price: 50.00,
-      authorId: "author_kla",
-      authorName: "Klaas",
-      authorProfileImageUrl: "https://picsum.photos/id/1016/50/50",
-      location: const LatLng(latitude: 51.970, longitude: 5.915),
-      imageUrls: const ["https://picsum.photos/seed/bike/200/300"],
-      postedAt: DateTime.now().subtract(const Duration(days: 20)),
-    ),
-    CatalogItem(
-      id: "6",
-      title: "Boek",
-      description: "A novel for young adults, great condition.",
-      price: 10.00,
-      authorId: "author_san",
-      authorName: "Sanne",
-      authorProfileImageUrl: "https://picsum.photos/id/1018/50/50",
-      location: const LatLng(latitude: 51.988, longitude: 5.900),
-      imageUrls: const ["https://picsum.photos/seed/book/200/300"],
-      postedAt: DateTime.now().subtract(const Duration(days: 7)),
-    ),
-    CatalogItem(
-      id: "7",
-      title: "Bordspel",
-      description: "Popular family board game, complete with all pieces.",
-      price: 15.00,
-      authorId: "author_pie",
-      authorName: "Piet",
-      authorProfileImageUrl: "https://picsum.photos/id/1020/50/50",
-      location: const LatLng(latitude: 51.995, longitude: 5.925),
-      imageUrls: const ["https://picsum.photos/seed/game/200/300"],
-      postedAt: DateTime.now().subtract(const Duration(days: 1)),
-    ),
-    CatalogItem(
-      id: "8",
-      title: "Kleding",
-      description: "Assortment of pre-loved clothes, various sizes.",
-      price: 0.00,
-      authorId: "author_ann",
-      authorName: "Anna",
-      authorProfileImageUrl: "https://picsum.photos/id/1024/50/50",
-      location: const LatLng(latitude: 51.970, longitude: 5.908),
-      imageUrls: const ["https://picsum.photos/seed/clothes/200/300"],
-      postedAt: DateTime.now().subtract(const Duration(hours: 3)),
     ),
   ];
 
@@ -187,11 +120,29 @@ class MemoryCatalogRepository implements CatalogRepository {
     }
   }
 
+  @override
+  Future<void> createCatalogItem(Map<String, dynamic> item) async {
+    await Future.delayed(const Duration(milliseconds: 400));
+
+
+    var newItem = CatalogItem(
+      id: Random().nextInt(99999).toString(),
+      title: item["title"] ?? "No Title",
+      description: item["description"] ?? "",
+      imageUrls: [],
+      price: (item["custom_price_in_cents"] as int? ?? 0) / 100.0,
+      location: const LatLng(latitude: 51.98, longitude: 5.91),
+      postedAt: DateTime.now(),
+      authorId: item["authorId"],
+    );
+
+    _baseItems.insert(0, newItem);
+  }
+
   /// Calculates the distance between two LatLng points in kilometers
   /// (Haversine formula).
   double _calculateDistance(LatLng point1, LatLng point2) {
-    const earthRadiusKm = 6371; // Earth's radius in kilometers
-
+    const earthRadiusKm = 6371;
     var lat1Rad = _degreesToRadians(point1.latitude);
     var lon1Rad = _degreesToRadians(point1.longitude);
     var lat2Rad = _degreesToRadians(point2.latitude);
