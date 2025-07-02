@@ -124,7 +124,6 @@ class MemoryCatalogRepository implements CatalogRepository {
   Future<void> createCatalogItem(Map<String, dynamic> item) async {
     await Future.delayed(const Duration(milliseconds: 400));
 
-
     var newItem = CatalogItem(
       id: Random().nextInt(99999).toString(),
       title: item["title"] ?? "No Title",

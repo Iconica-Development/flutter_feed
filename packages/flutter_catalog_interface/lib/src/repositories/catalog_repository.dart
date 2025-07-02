@@ -2,11 +2,8 @@ import "package:flutter_catalog_interface/src/models/catalog_item.dart";
 import "package:flutter_catalog_interface/src/models/lat_lng.dart";
 
 /// The interface for interacting with the catalog.
-abstract class CatalogRepository {
-
-  /// Creates a new catalog item.
-  ///
-  /// [item] is a map representing the item to be created.
+abstract class CatalogRepository<T extends CatalogItem> {
+  /// Creates a new catalog item from a map.
   Future<void> createCatalogItem(Map<String, dynamic> item);
 
   /// Fetches a list of catalog items.
@@ -16,7 +13,7 @@ abstract class CatalogRepository {
   /// [filters] allow for filtering the items (e.g., by category).
   /// [limit] specifies the maximum number of items to return.
   /// [offset] specifies the starting index for pagination.
-  Future<List<CatalogItem>> fetchCatalogItems({
+  Future<List<T>> fetchCatalogItems({
     required String userId,
     LatLng? userLocation,
     Map<String, dynamic>? filters,
@@ -28,7 +25,7 @@ abstract class CatalogRepository {
   ///
   /// [itemId] is the unique identifier of the catalog item.
   /// [userId] is the ID of the user requesting the item, used for personalized
-  Future<CatalogItem?> fetchCatalogItemById(
+  Future<T?> fetchCatalogItemById(
     String itemId,
     String userId,
   );

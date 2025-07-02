@@ -7,46 +7,85 @@ import "package:flutter_catalog_rest_api/src/rest_converters.dart";
 
 export "package:dart_api_service/dart_api_service.dart" show Client;
 
-/// An implementation of [CatalogRepository] that uses a RESTful API.
-class RestCatalogRepository extends HttpApiService<List<CatalogItem>>
-    implements CatalogRepository {
-  /// Creates a [RestCatalogRepository].
+/// A generic implementation of [CatalogRepository] that uses a RESTful API.
+///
+/// This repository is generic over `T` which must be a type that extends
+/// [CatalogItem]. This allows projects to use their own custom item models
+/// while still leveraging this reusable repository.
+///
+/// For simple use cases with the base [CatalogItem], the `fromJsonFactory`
+/// is not required. For custom subclasses of [CatalogItem], the factory
+/// must be provided to ensure correct JSON deserialization.
+class RestCatalogRepository<T extends CatalogItem>
+    extends HttpApiService<List<T>> implements CatalogRepository<T> {
+  /// Creates an instance of the [RestCatalogRepository].
   ///
-  /// [baseUrl] is the base URL for the catalog API.
+  /// Requires a [baseUrl] for the API and can be configured with an optional
+  /// [fromJsonFactory] for custom `CatalogItem` types.
   RestCatalogRepository({
     required super.baseUrl,
-    super.apiResponseConverter,
+    T Function(Map<String, dynamic>)? fromJsonFactory,
     super.authenticationService,
     super.client,
     super.defaultHeaders,
     this.apiPrefix = "",
-    this.createCatalogItemEndpoint = "/catalog/catalog-items",
     this.fetchCatalogItemsEndpoint = "/catalog/catalog-items",
     this.fetchCatalogItemByIdEndpoint = "/catalog/catalog-items/:id",
     this.toggleFavoriteEndpoint = "/catalog/catalog-items/:itemId/favorite",
-  });
+    this.createCatalogItemEndpoint = "/catalog/catalog-items",
+  })  : fromJsonFactory = _getFromJsonFactory<T>(fromJsonFactory),
+        super(
+          apiResponseConverter: createCatalogItemsConverter<T>(
+            fromJson: _getFromJsonFactory<T>(fromJsonFactory),
+          ),
+        );
 
-  /// The prefix for the API endpoints.
+  /// The factory function used to create an instance of `T` from a JSON map.
+  final T Function(Map<String, dynamic>) fromJsonFactory;
+
+  /// The common prefix for all API endpoints in this repository.
   final String apiPrefix;
 
-  /// Endpoint for creating a catalog item.
-  final String createCatalogItemEndpoint;
-
-  /// Endpoint for fetching catalog items.
+  /// The endpoint for fetching a list of catalog items.
   final String fetchCatalogItemsEndpoint;
 
-  /// Endpoint for fetching a catalog item by its ID.
+  /// The endpoint for fetching a single catalog item by its ID.
   final String fetchCatalogItemByIdEndpoint;
 
-  /// Endpoint for toggling a catalog item's favorite status.
+  /// The endpoint for toggling the favorite status of an item.
   final String toggleFavoriteEndpoint;
 
-  Endpoint get _baseEndpoint => endpoint(apiPrefix);
+  /// The endpoint for creating a new catalog item.
+  final String createCatalogItemEndpoint;
+
+  /// A helper that provides a default `fromJson` factory for the base
+  /// [CatalogItem] or throws an error if a factory is missing for a custom
+  /// type.
+  static U Function(Map<String, dynamic>)
+      _getFromJsonFactory<U extends CatalogItem>(
+    U Function(Map<String, dynamic>)? fromJson,
+  ) {
+    if (fromJson != null) {
+      return fromJson;
+    }
+    if (U == CatalogItem) {
+      return CatalogItem.fromJson as U Function(Map<String, dynamic>);
+    }
+    throw ArgumentError(
+      "A fromJsonFactory must be provided for custom types like $U.",
+      "fromJsonFactory",
+    );
+  }
+
+  /// Returns a base [Endpoint] instance with the configured API prefix.
+  Endpoint<List<T>, List<T>> get _baseEndpoint => endpoint(apiPrefix);
 
   @override
   Future<void> createCatalogItem(Map<String, dynamic> item) async {
-    var createEndpoint =
-        _baseEndpoint.child(createCatalogItemEndpoint).authenticate();
+    var createEndpoint = _baseEndpoint
+        .child(createCatalogItemEndpoint)
+        .authenticate()
+        .withConverter(const NoOpConverter());
 
     try {
       await createEndpoint.post(requestModel: item);
@@ -62,7 +101,7 @@ class RestCatalogRepository extends HttpApiService<List<CatalogItem>>
   }
 
   @override
-  Future<List<CatalogItem>> fetchCatalogItems({
+  Future<List<T>> fetchCatalogItems({
     required String userId,
     LatLng? userLocation,
     Map<String, dynamic>? filters,
@@ -88,18 +127,9 @@ class RestCatalogRepository extends HttpApiService<List<CatalogItem>>
     }
 
     try {
-      var response = await catalogEndpoint.get(
-        queryParameters: queryParameters,
-      );
-
-      if (response.result != null) {
-        return response.result!;
-      } else {
-        throw ApiException(
-          inner: response.inner,
-          error: "No catalog items found, but request succeeded.",
-        );
-      }
+      var response =
+          await catalogEndpoint.get(queryParameters: queryParameters);
+      return response.result ?? [];
     } on ApiException {
       rethrow;
     } on Exception catch (e, s) {
@@ -112,23 +142,21 @@ class RestCatalogRepository extends HttpApiService<List<CatalogItem>>
   }
 
   @override
-  Future<CatalogItem?> fetchCatalogItemById(String id, String userId) async {
+  Future<T?> fetchCatalogItemById(String id, String userId) async {
     var itemEndpoint = _baseEndpoint
         .child(fetchCatalogItemByIdEndpoint)
         .authenticate()
-        .withVariables({"id": id}).withConverter(catalogItemConverter);
+        .withVariables({"id": id}).withConverter(
+      createCatalogItemConverter<T>(fromJson: fromJsonFactory),
+    );
 
     try {
       var response = await itemEndpoint.get();
-
-      if (response.statusCode == 200 && response.result != null) {
-        return response.result!;
-      } else if (response.statusCode == 404) {
+      return response.result;
+    } on ApiException catch (e) {
+      if (e.statusCode == 404) {
         return null;
-      } else {
-        throw ApiException(inner: response.inner);
       }
-    } on ApiException {
       rethrow;
     } on Exception catch (e, s) {
       throw ApiException(
@@ -144,14 +172,10 @@ class RestCatalogRepository extends HttpApiService<List<CatalogItem>>
     var favoriteEndpoint = _baseEndpoint
         .child(toggleFavoriteEndpoint)
         .authenticate()
-        .withVariables({"itemId": itemId}).withConverter(
-      const NoOpConverter(),
-    );
+        .withVariables({"itemId": itemId}).withConverter(const NoOpConverter());
 
     try {
-      await favoriteEndpoint.post(
-        requestModel: {"userId": userId},
-      );
+      await favoriteEndpoint.post(requestModel: {"userId": userId});
     } on ApiException {
       rethrow;
     } on Exception catch (e, s) {
