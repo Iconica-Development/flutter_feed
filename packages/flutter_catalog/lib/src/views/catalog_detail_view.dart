@@ -178,22 +178,22 @@ class _AuthorSection extends StatelessWidget {
 
     return Row(
       children: [
-        CircleAvatar(
-          radius: 24,
-          backgroundImage: (item.authorProfileImageUrl != null)
-              ? CachedNetworkImageProvider(item.authorProfileImageUrl!)
-              : null,
-          child: (item.authorProfileImageUrl == null)
-              ? const Icon(Icons.person)
-              : null,
-        ),
+        // CircleAvatar(
+        //   radius: 24,
+        //   backgroundImage: (item.authorProfileImageUrl != null)
+        //       ? CachedNetworkImageProvider(item.authorProfileImageUrl!)
+        //       : null,
+        //   child: (item.authorProfileImageUrl == null)
+        //       ? const Icon(Icons.person)
+        //       : null,
+        // ),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                item.authorName ?? "Unknown User",
+                item.authorId ?? "Unknown User",
                 style: textTheme.titleMedium
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
@@ -233,7 +233,7 @@ class _InfoSection extends StatelessWidget {
         Text(item.title, style: textTheme.headlineMedium),
         const SizedBox(height: 4),
         Text(
-          item.price.toStringAsFixed(2),
+          item.price?.toStringAsFixed(2) ?? "Free",
           style: textTheme.titleLarge
               ?.copyWith(color: Theme.of(context).colorScheme.primary),
         ),

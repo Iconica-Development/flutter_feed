@@ -37,17 +37,19 @@ class CatalogGridItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            /// The item image, which expands to fill the available space.
-            Expanded(
-              child: CachedNetworkImage(
-                imageUrl: item.imageUrls.first,
-                fit: BoxFit.cover,
-                placeholder: (context, url) =>
-                    const Center(child: CircularProgressIndicator.adaptive()),
-                errorWidget: (context, url, error) =>
-                    const Icon(Icons.broken_image),
+            if (item.imageUrls.isNotEmpty) ...[
+              /// The item image, which expands to fill the available space.
+              Expanded(
+                child: CachedNetworkImage(
+                  imageUrl: item.imageUrls.first,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator.adaptive()),
+                  errorWidget: (context, url, error) =>
+                      const Icon(Icons.broken_image),
+                ),
               ),
-            ),
+            ],
 
             /// The details section at the bottom of the card.
             Padding(
@@ -65,7 +67,7 @@ class CatalogGridItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    item.price.toStringAsFixed(2),
+                    item.price?.toStringAsFixed(2) ?? "Free",
                     style: textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 4),
@@ -79,7 +81,7 @@ class CatalogGridItem extends StatelessWidget {
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
-                          item.authorName ?? "Unknown",
+                          item.authorId ?? "Unknown",
                           style: textTheme.bodySmall,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
