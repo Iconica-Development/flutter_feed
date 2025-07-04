@@ -1,3 +1,4 @@
+import "package:cross_file/cross_file.dart";
 import "package:flutter_catalog_interface/src/models/catalog_item.dart";
 import "package:flutter_catalog_interface/src/models/lat_lng.dart";
 
@@ -5,6 +6,9 @@ import "package:flutter_catalog_interface/src/models/lat_lng.dart";
 abstract class CatalogRepository<T extends CatalogItem> {
   /// Creates a new catalog item from a map.
   Future<void> createCatalogItem(Map<String, dynamic> item);
+
+  /// Uploads an image from an [XFile] object and returns its public URL.
+  Future<String> uploadImage(XFile imageFile);
 
   /// Fetches a list of catalog items.
   ///

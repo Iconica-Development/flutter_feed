@@ -1,10 +1,12 @@
 import "dart:convert";
 
-import "package:dart_api_service/dart_api_service.dart";
+import "package:cross_file/cross_file.dart";
 import "package:dart_api_service/dart_api_service.dart" as http;
+import "package:dart_api_service/dart_api_service.dart";
 import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 import "package:flutter_catalog_rest_api/src/rest_converters.dart";
 
+export "package:cross_file/cross_file.dart" show XFile;
 export "package:dart_api_service/dart_api_service.dart" show Client;
 
 /// A generic implementation of [CatalogRepository] that uses a RESTful API.
@@ -33,6 +35,7 @@ class RestCatalogRepository<T extends CatalogItem>
     this.fetchCatalogItemByIdEndpoint = "/catalog/catalog-items/:id",
     this.toggleFavoriteEndpoint = "/catalog/catalog-items/:itemId/favorite",
     this.createCatalogItemEndpoint = "/catalog/catalog-items",
+    this.uploadImageEndpoint = "/catalog/upload_image",
   })  : fromJsonFactory = _getFromJsonFactory<T>(fromJsonFactory),
         super(
           apiResponseConverter: createCatalogItemsConverter<T>(
@@ -57,6 +60,9 @@ class RestCatalogRepository<T extends CatalogItem>
 
   /// The endpoint for creating a new catalog item.
   final String createCatalogItemEndpoint;
+
+  /// The endpoint for uploading an image.
+  final String uploadImageEndpoint;
 
   /// A helper that provides a default `fromJson` factory for the base
   /// [CatalogItem] or throws an error if a factory is missing for a custom
@@ -89,6 +95,40 @@ class RestCatalogRepository<T extends CatalogItem>
 
     try {
       await createEndpoint.post(requestModel: item);
+    } on ApiException {
+      rethrow;
+    } on Exception catch (e, s) {
+      throw ApiException(
+        inner: http.Response("Unexpected error: $e", 500),
+        error: e,
+        stackTrace: s,
+      );
+    }
+  }
+
+  @override
+  Future<String> uploadImage(XFile imageFile) async {
+    var uploadEndpoint = _baseEndpoint
+        .child(uploadImageEndpoint)
+        .authenticate()
+        .withConverter(const JsonMapResponseConverter());
+
+    try {
+      var response = await uploadEndpoint.upload(
+        fieldName: "image",
+        fileBytes: await imageFile.readAsBytes(),
+        fileName: imageFile.name,
+      );
+
+      var url = response.result?["url"] as String?;
+
+      if (url == null) {
+        throw ApiException(
+          inner: response.inner,
+          error: "URL not found in upload response",
+        );
+      }
+      return url;
     } on ApiException {
       rethrow;
     } on Exception catch (e, s) {

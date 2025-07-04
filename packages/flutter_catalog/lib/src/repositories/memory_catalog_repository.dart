@@ -1,4 +1,5 @@
 import "dart:math";
+import "package:cross_file/cross_file.dart";
 import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 
 /// An in-memory implementation of the [CatalogRepository].
@@ -118,6 +119,13 @@ class MemoryCatalogRepository implements CatalogRepository {
     } else {
       _userFavorites[userId]!.add(itemId);
     }
+  }
+
+  @override
+  Future<String> uploadImage(XFile imageFile) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    // Simulate image upload and return a mock URL
+    return "https://example.com/images/${imageFile.name}";
   }
 
   @override

@@ -7,6 +7,9 @@ publish_to: https://forgejo.internal.iconica.nl/api/packages/internal/pub
 environment:
   sdk: ">=3.4.0 <4.0.0"
 
+dependencies:
+  cross_file: ^0.3.0
+
 dev_dependencies:
   flutter_iconica_analysis:
     hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub

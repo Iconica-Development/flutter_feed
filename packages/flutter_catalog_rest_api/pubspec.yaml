@@ -8,6 +8,7 @@ environment:
   sdk: ">=3.4.0 <4.0.0"
 
 dependencies:
+  cross_file: ^0.3.0
   dart_api_service:
     hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub/
     version: ^1.1.2

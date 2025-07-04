@@ -19,6 +19,7 @@ dependencies:
   # Utilities
   cached_network_image: ^3.3.0
   flutter_hooks: ">=0.18.0 <1.0.0"
+  cross_file: ^0.3.0
 
   # Internal packages
   flutter_catalog_interface:
