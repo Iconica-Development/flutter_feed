@@ -1,29 +1,24 @@
+import "package:cross_file/cross_file.dart";
 import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 
 /// A service class to manage catalog-related operations.
 ///
-/// This class uses a [CatalogRepository] to fetch and manipulate catalog data.
-class CatalogService {
+/// This class is generic and uses a [CatalogRepository] to fetch and
+/// manipulate catalog data of type T.
+class CatalogService<T extends CatalogItem> {
   /// Creates a [CatalogService] with the given repository.
   CatalogService({
-    required CatalogRepository repository,
+    required CatalogRepository<T> repository,
     required this.userId,
   }) : _repository = repository;
 
-  final CatalogRepository _repository;
+  final CatalogRepository<T> _repository;
 
   /// The ID of the user for whom catalog operations are performed.
   final String userId;
 
-  /// Retrieves catalog items, optionally applying filters, user location,
-  /// pagination, and filtered by user.
-  ///
-  /// [userId] is required for personalized results or distance calculations.
-  /// [userLocation] provides the GPS location for distance calculation.
-  /// [filters] allow for filtering the items (e.g., by category).
-  /// [limit] specifies the maximum number of items to return.
-  /// [offset] specifies the starting index for pagination.
-  Future<List<CatalogItem>> fetchCatalogItems({
+  /// Retrieves catalog items, optionally applying filters and user location.
+  Future<List<T>> fetchCatalogItems({
     LatLng? userLocation,
     Map<String, dynamic>? filters,
     int? limit,
@@ -37,15 +32,30 @@ class CatalogService {
         offset: offset,
       );
 
-  /// Toggles the favorite status of an item for a specific user.
-  ///
-  /// [itemId] is the ID of the catalog item.
-  Future<void> toggleFavorite(
-    String itemId,
-  ) async =>
+  /// Toggles the favorite status of an item for the current user.
+  Future<void> toggleFavorite(String itemId) async =>
       _repository.toggleFavorite(itemId, userId);
 
   /// Fetches a single catalog item by its ID.
-  Future<CatalogItem?> fetchCatalogItemById(String id) async =>
+  Future<T?> fetchCatalogItemById(String id) async =>
       _repository.fetchCatalogItemById(id, userId);
+
+  /// Creates a new catalog item.
+  Future<void> createCatalogItem(Map<String, dynamic> item) async =>
+      _repository.createCatalogItem(item);
+
+  /// Updates an existing catalog item by its ID.
+  Future<void> updateCatalogItem(
+    String itemId,
+    Map<String, dynamic> item,
+  ) async =>
+      _repository.updateCatalogItem(itemId, item);
+
+  /// Deletes a catalog item by its ID.
+  Future<void> deleteCatalogItem(String itemId) async =>
+      _repository.deleteCatalogItem(itemId);
+
+  /// Uploads an image file.
+  Future<String> uploadImage(XFile imageFile) async =>
+      _repository.uploadImage(imageFile);
 }

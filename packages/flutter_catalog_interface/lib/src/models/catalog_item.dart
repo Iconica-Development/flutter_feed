@@ -13,22 +13,40 @@ class CatalogItem {
     required this.postedAt,
     this.price,
     this.authorId,
+    this.customFields = const {},
     this.distanceKM,
     this.isFavorited,
   });
 
   /// Creates a [CatalogItem] from a JSON map.
-  factory CatalogItem.fromJson(Map<String, dynamic> json) => CatalogItem(
-        id: json["id"] as String,
-        title: json["title"] as String,
-        description: json["description"] as String,
-        imageUrls: List<String>.from(json["imageUrls"] as List? ?? []),
-        location: LatLng.fromJson(json["location"] as Map<String, dynamic>),
-        postedAt: DateTime.parse(json["postedAt"] as String),
-        price: (json["price"] as num?)?.toDouble(),
-        authorId: json["authorId"] as String?,
-        isFavorited: json["isFavorited"] as bool?,
-      );
+  factory CatalogItem.fromJson(Map<String, dynamic> json) {
+    var knownKeys = [
+      "id",
+      "title",
+      "description",
+      "imageUrls",
+      "location",
+      "postedAt",
+      "price",
+      "authorId",
+      "distanceKM",
+      "isFavorited",
+    ];
+    var customFields = Map<String, dynamic>.from(json)
+      ..removeWhere((key, value) => knownKeys.contains(key));
+    return CatalogItem(
+      id: json["id"] as String,
+      title: json["title"] as String,
+      description: json["description"] as String,
+      imageUrls: List<String>.from(json["imageUrls"] as List? ?? []),
+      location: LatLng.fromJson(json["location"] as Map<String, dynamic>),
+      postedAt: DateTime.parse(json["postedAt"] as String),
+      price: (json["price"] as num?)?.toDouble(),
+      authorId: json["authorId"] as String?,
+      isFavorited: json["isFavorited"] as bool?,
+      customFields: customFields,
+    );
+  }
 
   /// The unique identifier for the catalog item.
   final String id;
@@ -55,6 +73,9 @@ class CatalogItem {
   /// The ID of the user who created or owns the catalog item.
   final String? authorId;
 
+  /// Custom fields for the catalog item, allowing for additional metadata.
+  final Map<String, dynamic> customFields;
+
   /// The distance in kilometers from the user's location to the catalog item.
   final double? distanceKM;
 
@@ -71,7 +92,7 @@ class CatalogItem {
         "postedAt": postedAt.toIso8601String(),
         if (price != null) "price": price,
         if (authorId != null) "authorId": authorId,
-        if (isFavorited != null) "isFavorited": isFavorited,
+        ...customFields,
       };
 
   //... copyWith, hashCode, and operator== methods would also be updated
@@ -94,6 +115,7 @@ class CatalogItem {
     String? authorId,
     double? distanceKM,
     bool? isFavorited,
+    Map<String, dynamic>? customFields,
   }) =>
       CatalogItem(
         id: id ?? this.id,
@@ -106,5 +128,6 @@ class CatalogItem {
         authorId: authorId ?? this.authorId,
         distanceKM: distanceKM ?? this.distanceKM,
         isFavorited: isFavorited ?? this.isFavorited,
+        customFields: customFields ?? this.customFields,
       );
 }

@@ -9,6 +9,7 @@ import "package:flutter_catalog/src/routes.dart";
 import "package:flutter_catalog/src/services/catalog_service.dart";
 import "package:flutter_catalog/src/services/pop_handler.dart";
 import "package:flutter_catalog/src/utils/scope.dart";
+import "package:flutter_catalog/src/views/catalog_modify_view.dart";
 import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 
@@ -53,6 +54,30 @@ class FlutterCatalogDetailUserstory extends _BaseCatalogNavigatorUserstory {
   ) =>
       catalogDetailRoute(
         item: item,
+      );
+}
+
+/// A self-contained user story for creating or editing a catalog item.
+class FlutterCatalogModifyUserstory extends _BaseCatalogNavigatorUserstory {
+  /// Constructs a [FlutterCatalogModifyUserstory].
+  const FlutterCatalogModifyUserstory({
+    required super.userId,
+    required super.options,
+    this.initialItem,
+    super.onExit,
+    super.key,
+  });
+
+  /// The initial catalog item to edit, or `null` for creating a new item.
+  final CatalogItem? initialItem;
+
+  @override
+  MaterialPageRoute buildInitialRoute(BuildContext context) =>
+      MaterialPageRoute(
+        builder: (context) => CatalogModifyView(
+          initialItem: initialItem,
+          onExit: onExit,
+        ),
       );
 }
 

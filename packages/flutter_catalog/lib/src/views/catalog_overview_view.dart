@@ -45,10 +45,16 @@ class CatalogOverviewView extends HookWidget {
       [onExit],
     );
 
-    var appBar = _AppBar(
-      localizations: localizations,
-      searchController: searchController,
-    );
+    var appBar = (options.filterOptions?.showSearchInOverview ?? true)
+        ? _AppBarWithSearch(
+            localizations: localizations,
+            searchController: searchController,
+          )
+        : AppBar(
+            title: Text(
+              options.translations.overviewTitle ?? localizations.overviewTitle,
+            ),
+          );
 
     var body = Column(
       children: [
@@ -77,7 +83,7 @@ class CatalogOverviewView extends HookWidget {
         context,
         ScreenType.catalogOverview,
         appBar,
-        localizations.overviewTitle,
+        options.translations.overviewTitle ?? localizations.overviewTitle,
         body,
       );
     }
@@ -89,8 +95,8 @@ class CatalogOverviewView extends HookWidget {
   }
 }
 
-class _AppBar extends HookWidget implements PreferredSizeWidget {
-  const _AppBar({
+class _AppBarWithSearch extends HookWidget implements PreferredSizeWidget {
+  const _AppBarWithSearch({
     required this.localizations,
     required this.searchController,
   });
@@ -129,45 +135,50 @@ class _AppBar extends HookWidget implements PreferredSizeWidget {
     );
 
     return AppBar(
-      automaticallyImplyLeading: false,
       elevation: 0,
       scrolledUnderElevation: 0,
-      title: TextField(
-        controller: searchController,
-        decoration: InputDecoration(
-          hintText: localizations.searchHint,
-          suffixIcon: Icon(
-            Icons.search,
-            color: colorScheme.onSurfaceVariant,
-          ),
-          filled: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30.0),
-            borderSide: BorderSide(
-              color: colorScheme.outline,
+      flexibleSpace: Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
+          child: TextField(
+            controller: searchController,
+            decoration: InputDecoration(
+              hintText: localizations.searchHint,
+              suffixIcon: Icon(
+                Icons.search,
+                color: colorScheme.onSurfaceVariant,
+              ),
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30.0),
+                borderSide: BorderSide(
+                  color: colorScheme.outline,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30.0),
+                borderSide: BorderSide(
+                  color: colorScheme.outline.withOpacity(0.5),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30.0),
+                borderSide: BorderSide(
+                  color: colorScheme.primary,
+                ),
+              ),
+              hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
             ),
+            style: TextStyle(color: colorScheme.onSurface),
           ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30.0),
-            borderSide: BorderSide(
-              color: colorScheme.outline.withOpacity(0.5),
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30.0),
-            borderSide: BorderSide(
-              color: colorScheme.primary,
-            ),
-          ),
-          hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
         ),
-        style: TextStyle(color: colorScheme.onSurface),
       ),
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(100);
 }
 
 class _FilterBar extends StatelessWidget {

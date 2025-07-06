@@ -43,6 +43,25 @@ class CatalogOptions {
 
   /// An optional filter configuration for managing item filtering.
   final FilterOptions? filterOptions;
+
+  /// Creates a copy of this object with the given fields replaced
+  /// with the new values.
+  CatalogOptions copyWith({
+    CatalogRepository? catalogRepository,
+    CatalogBuilders? builders,
+    CatalogTheme? theme,
+    CatalogTranslations? translations,
+    VoidCallback? onNoItems,
+    FilterOptions? filterOptions,
+  }) =>
+      CatalogOptions(
+        catalogRepository: catalogRepository ?? this.catalogRepository,
+        builders: builders ?? this.builders,
+        theme: theme ?? this.theme,
+        translations: translations ?? this.translations,
+        onNoItems: onNoItems ?? this.onNoItems,
+        filterOptions: filterOptions ?? this.filterOptions,
+      );
 }
 
 /// A configuration class for managing filter-related repositories and options.
@@ -50,6 +69,7 @@ class FilterOptions {
   /// Constructs a [FilterOptions].
   const FilterOptions({
     this.showFiltersInOverview = true,
+    this.showSearchInOverview = true,
     this.filterRepository,
     this.filterValueRepository,
     this.filterDataSourceRepository,
@@ -60,6 +80,10 @@ class FilterOptions {
   /// If disabled the filter section on the overview screen will not be
   /// displayed
   final bool showFiltersInOverview;
+
+  /// Whether to show the search bar in the overview screen's AppBar.
+  /// Defaults to true.
+  final bool showSearchInOverview;
 
   /// The repository for managing filter data.
   final FilterRepository? filterRepository;

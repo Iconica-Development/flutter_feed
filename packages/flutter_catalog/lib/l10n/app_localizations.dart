@@ -129,6 +129,12 @@ abstract class FlutterCatalogLocalizations {
   /// **'Failed to load items.'**
   String get itemLoadingError;
 
+  /// No description provided for @itemCreatePageMandatorySection.
+  ///
+  /// In en, this message translates to:
+  /// **'Mandatory'**
+  String get itemCreatePageMandatorySection;
+
   /// No description provided for @detailDescriptionTitle.
   ///
   /// In en, this message translates to:
@@ -159,11 +165,107 @@ abstract class FlutterCatalogLocalizations {
   /// **'Distance'**
   String get distanceTitle;
 
-  /// Indicates how long ago the item was posted, formatted as a relative date.
+  /// No description provided for @postedSince.
   ///
   /// In en, this message translates to:
   /// **'Posted since {date}'**
   String postedSince(Object date);
+
+  /// No description provided for @itemCreatePageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Item'**
+  String get itemCreatePageTitle;
+
+  /// No description provided for @itemEditPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Item'**
+  String get itemEditPageTitle;
+
+  /// No description provided for @itemCreatePageTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get itemCreatePageTitleHint;
+
+  /// No description provided for @itemCreatePageDescriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get itemCreatePageDescriptionHint;
+
+  /// No description provided for @itemCreatePageTitleRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Title is required.'**
+  String get itemCreatePageTitleRequiredError;
+
+  /// No description provided for @itemCreatePageAddImagesButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Images'**
+  String get itemCreatePageAddImagesButton;
+
+  /// No description provided for @itemCreatePageSaveChangesButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get itemCreatePageSaveChangesButton;
+
+  /// No description provided for @itemCreatePageSavingChangesButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get itemCreatePageSavingChangesButton;
+
+  /// No description provided for @itemCreatePageDeleteItemButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Item'**
+  String get itemCreatePageDeleteItemButton;
+
+  /// No description provided for @itemCreatePageDeleteConfirmationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Item'**
+  String get itemCreatePageDeleteConfirmationTitle;
+
+  /// No description provided for @itemCreatePageDeleteConfirmationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this item forever?'**
+  String get itemCreatePageDeleteConfirmationMessage;
+
+  /// No description provided for @itemCreatePageDeleteConfirmationConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get itemCreatePageDeleteConfirmationConfirm;
+
+  /// No description provided for @itemCreatePageDeleteConfirmationCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get itemCreatePageDeleteConfirmationCancel;
+
+  /// No description provided for @itemCreatePageGenericError.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred.'**
+  String get itemCreatePageGenericError;
+
+  /// No description provided for @itemCreatePageItemDeletedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Item deleted successfully.'**
+  String get itemCreatePageItemDeletedSuccess;
+
+  /// No description provided for @itemCreatePageItemDeleteError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete item.'**
+  String get itemCreatePageItemDeleteError;
 }
 
 class _FlutterCatalogLocalizationsDelegate

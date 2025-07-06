@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_catalog/src/views/catalog_detail_view.dart";
 import "package:flutter_catalog/src/views/catalog_filter_view.dart";
+import "package:flutter_catalog/src/views/catalog_modify_view.dart";
 import "package:flutter_catalog/src/views/catalog_overview_view.dart";
 import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 
@@ -32,6 +33,25 @@ MaterialPageRoute catalogDetailRoute({
       builder: (context) => CatalogDetailView(
         item: item,
         onExit: () => Navigator.of(context).pop(),
+        onEditItem: (itemToEdit) async => _routeToScreen(
+          context,
+          catalogModifyRoute(
+            initialItem: itemToEdit,
+            onExit: () => Navigator.of(context).pop(),
+          ).builder(context),
+        ),
+      ),
+    );
+
+/// Returns a [MaterialPageRoute] for the create/edit screen.
+MaterialPageRoute<void> catalogModifyRoute({
+  required VoidCallback onExit,
+  CatalogItem? initialItem,
+}) =>
+    MaterialPageRoute(
+      builder: (context) => CatalogModifyView(
+        initialItem: initialItem,
+        onExit: onExit,
       ),
     );
 

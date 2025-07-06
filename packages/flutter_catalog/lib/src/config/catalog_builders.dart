@@ -12,6 +12,7 @@ class CatalogBuilders {
     this.errorPlaceholderBuilder,
     this.noItemsPlaceholderBuilder,
     this.filterSectionBuilder,
+    this.primaryButtonBuilder = _defaultPrimaryButtonBuilder,
   });
 
   /// A builder for the main screen layout.
@@ -47,6 +48,26 @@ class CatalogBuilders {
   ///   (e.g., checkboxes, sliders).
   final Widget Function(BuildContext context, String title, Widget child)?
       filterSectionBuilder;
+
+  /// A builder for primary action buttons, like the 'Save' button.
+  ///
+  /// If not provided, a default [ElevatedButton] will be used.
+  final PrimaryButtonBuilder primaryButtonBuilder;
+
+  /// The default builder for the primary button.
+  static Widget _defaultPrimaryButtonBuilder(
+    BuildContext context, {
+    required VoidCallback onPressed,
+    // onDisabledPressed is ignored by the default implementation
+    // as a standard ElevatedButton is not clickable when disabled.
+    required VoidCallback onDisabledPressed,
+    required bool isDisabled,
+    required Widget child,
+  }) =>
+      ElevatedButton(
+        onPressed: isDisabled ? null : onPressed,
+        child: child,
+      );
 }
 
 /// The base screen builder signature.
@@ -63,3 +84,18 @@ typedef BaseScreenBuilder = Widget Function(
   String? title,
   Widget body,
 );
+
+/// A builder for a primary action button.
+///
+/// - [onPressed]: The callback for when the button is pressed and enabled.
+/// - [onDisabledPressed]: The callback for when the button is pressed but
+/// disabled.
+/// - [isDisabled]: Whether the button should be in a disabled state.
+/// - [child]: The widget to display inside the button.
+typedef PrimaryButtonBuilder = Widget Function(
+  BuildContext context, {
+  required VoidCallback onPressed,
+  required VoidCallback onDisabledPressed,
+  required bool isDisabled,
+  required Widget child,
+});

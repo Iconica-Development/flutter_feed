@@ -11,6 +11,7 @@ class CatalogDetailView extends HookWidget {
   /// Creates a [CatalogDetailView].
   const CatalogDetailView({
     required this.item,
+    required this.onEditItem,
     super.key,
     this.onExit,
   });
@@ -21,11 +22,14 @@ class CatalogDetailView extends HookWidget {
   /// A callback to execute when the user wants to navigate back.
   final VoidCallback? onExit;
 
+  /// A callback to execute when the user wants to edit the item.
+  final void Function(CatalogItem item) onEditItem;
+
   @override
   Widget build(BuildContext context) {
     var scope = CatalogScope.of(context);
     var service = scope.catalogService;
-
+    var isAuthor = scope.userId == item.authorId;
     var isFavorite = useState(item.isFavorited ?? false);
 
     useEffect(
@@ -67,6 +71,12 @@ class CatalogDetailView extends HookWidget {
             ),
             onPressed: toggleFavorite,
           ),
+          if (isAuthor)
+            IconButton(
+              icon: const Icon(Icons.edit),
+              // Call the new callback when pressed
+              onPressed: () => onEditItem(item),
+            ),
         ],
       ),
       body: SingleChildScrollView(
