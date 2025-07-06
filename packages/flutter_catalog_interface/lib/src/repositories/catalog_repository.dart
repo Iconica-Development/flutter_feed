@@ -10,6 +10,12 @@ abstract class CatalogRepository<T extends CatalogItem> {
   /// Uploads an image from an [XFile] object and returns its public URL.
   Future<String> uploadImage(XFile imageFile);
 
+  /// Updates an existing catalog item.
+  Future<void> updateCatalogItem(String itemId, Map<String, dynamic> item);
+
+  /// Deletes a catalog item by its ID.
+  Future<void> deleteCatalogItem(String itemId);
+
   /// Fetches a list of catalog items.
   ///
   /// [userId] is required for personalized results or distance calculations.

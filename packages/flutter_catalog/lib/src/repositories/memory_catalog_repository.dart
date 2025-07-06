@@ -58,7 +58,6 @@ class MemoryCatalogRepository implements CatalogRepository {
 
     var itemsToProcess = List<CatalogItem>.from(_baseItems);
 
-    // Apply query filter (if 'q' is present in filters)
     if (filters != null && filters.containsKey("q")) {
       var query = filters["q"].toString().toLowerCase();
       if (query.isNotEmpty) {
@@ -68,7 +67,6 @@ class MemoryCatalogRepository implements CatalogRepository {
       }
     }
 
-    // Apply dynamic properties like isFavorited and distanceKM
     itemsToProcess = itemsToProcess.map((item) {
       var isItemFavorited = _userFavorites[userId]?.contains(item.id) ?? false;
       double? calculatedDistanceKm;
@@ -83,7 +81,6 @@ class MemoryCatalogRepository implements CatalogRepository {
       );
     }).toList();
 
-    // Apply pagination (offset and limit)
     var startIndex = offset ?? 0;
     var endIndex = (limit != null)
         ? min(startIndex + limit, itemsToProcess.length)
@@ -93,9 +90,7 @@ class MemoryCatalogRepository implements CatalogRepository {
       return [];
     }
 
-    var paginatedItems = itemsToProcess.sublist(startIndex, endIndex);
-
-    return paginatedItems;
+    return itemsToProcess.sublist(startIndex, endIndex);
   }
 
   @override
@@ -124,7 +119,6 @@ class MemoryCatalogRepository implements CatalogRepository {
   @override
   Future<String> uploadImage(XFile imageFile) async {
     await Future.delayed(const Duration(milliseconds: 500));
-    // Simulate image upload and return a mock URL
     return "https://example.com/images/${imageFile.name}";
   }
 
@@ -136,8 +130,8 @@ class MemoryCatalogRepository implements CatalogRepository {
       id: Random().nextInt(99999).toString(),
       title: item["title"] ?? "No Title",
       description: item["description"] ?? "",
-      imageUrls: [],
-      price: (item["custom_price_in_cents"] as int? ?? 0) / 100.0,
+      imageUrls: List<String>.from(item["image_urls"] as List? ?? []),
+      price: (item["price"] as num?)?.toDouble(),
       location: const LatLng(latitude: 51.98, longitude: 5.91),
       postedAt: DateTime.now(),
       authorId: item["authorId"],
@@ -146,8 +140,36 @@ class MemoryCatalogRepository implements CatalogRepository {
     _baseItems.insert(0, newItem);
   }
 
-  /// Calculates the distance between two LatLng points in kilometers
-  /// (Haversine formula).
+  @override
+  Future<void> updateCatalogItem(
+    String itemId,
+    Map<String, dynamic> item,
+  ) async {
+    await Future.delayed(const Duration(milliseconds: 400));
+    var index = _baseItems.indexWhere((i) => i.id == itemId);
+    if (index != -1) {
+      var existingItem = _baseItems[index];
+      // Create a new item by applying the updates to the existing one.
+      var updatedItem = existingItem.copyWith(
+        title: item["title"] ?? existingItem.title,
+        description: item["description"] ?? existingItem.description,
+        price: item.containsKey("price")
+            ? (item["price"] as num?)?.toDouble()
+            : existingItem.price,
+        imageUrls: item.containsKey("image_urls")
+            ? List<String>.from(item["image_urls"])
+            : existingItem.imageUrls,
+      );
+      _baseItems[index] = updatedItem;
+    }
+  }
+
+  @override
+  Future<void> deleteCatalogItem(String itemId) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    _baseItems.removeWhere((item) => item.id == itemId);
+  }
+
   double _calculateDistance(LatLng point1, LatLng point2) {
     const earthRadiusKm = 6371;
     var lat1Rad = _degreesToRadians(point1.latitude);

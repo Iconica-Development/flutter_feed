@@ -36,6 +36,8 @@ class RestCatalogRepository<T extends CatalogItem>
     this.toggleFavoriteEndpoint = "/catalog/catalog-items/:itemId/favorite",
     this.createCatalogItemEndpoint = "/catalog/catalog-items",
     this.uploadImageEndpoint = "/catalog/upload_image",
+    this.updateCatalogItemEndpoint = "/catalog/catalog-items/:id",
+    this.deleteCatalogItemEndpoint = "/catalog/catalog-items/:id",
   })  : fromJsonFactory = _getFromJsonFactory<T>(fromJsonFactory),
         super(
           apiResponseConverter: createCatalogItemsConverter<T>(
@@ -63,6 +65,12 @@ class RestCatalogRepository<T extends CatalogItem>
 
   /// The endpoint for uploading an image.
   final String uploadImageEndpoint;
+
+  /// The endpoint for updating an existing catalog item.
+  final String updateCatalogItemEndpoint;
+
+  /// The endpoint for deleting a catalog item.
+  final String deleteCatalogItemEndpoint;
 
   /// A helper that provides a default `fromJson` factory for the base
   /// [CatalogItem] or throws an error if a factory is missing for a custom
@@ -138,6 +146,37 @@ class RestCatalogRepository<T extends CatalogItem>
         stackTrace: s,
       );
     }
+  }
+
+  @override
+  Future<void> updateCatalogItem(
+    String itemId,
+    Map<String, dynamic> item,
+  ) async {
+    var updateEndpoint = _baseEndpoint
+        .child(updateCatalogItemEndpoint)
+        .authenticate()
+        .withVariables({"id": itemId}).withConverter(const NoOpConverter());
+
+    try {
+      await updateEndpoint.patch(requestModel: item);
+    } on ApiException {
+      rethrow;
+    } on Exception catch (_) {}
+  }
+
+  @override
+  Future<void> deleteCatalogItem(String itemId) async {
+    var deleteEndpoint = _baseEndpoint
+        .child(deleteCatalogItemEndpoint)
+        .authenticate()
+        .withVariables({"id": itemId});
+
+    try {
+      await deleteEndpoint.delete();
+    } on ApiException {
+      rethrow;
+    } on Exception catch (_) {}
   }
 
   @override
