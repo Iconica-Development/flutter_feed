@@ -18,7 +18,10 @@
             "date": {}
         }
     },
+    "editItemButton": "Edit",
+    "contactUserDisabledMessage": "You cannot contact the author of this item.",
     "itemCreatePageTitle": "Create Item",
+    "priceFree": "Free",
     "itemEditPageTitle": "Edit Item",
     "itemCreatePageTitleHint": "Title",
     "itemCreatePageDescriptionHint": "Description",

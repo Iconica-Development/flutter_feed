@@ -12,6 +12,7 @@ class CatalogBuilders {
     this.errorPlaceholderBuilder,
     this.noItemsPlaceholderBuilder,
     this.filterSectionBuilder,
+    this.detailPageItemBuilder,
     this.primaryButtonBuilder = _defaultPrimaryButtonBuilder,
   });
 
@@ -48,6 +49,12 @@ class CatalogBuilders {
   ///   (e.g., checkboxes, sliders).
   final Widget Function(BuildContext context, String title, Widget child)?
       filterSectionBuilder;
+
+  /// A builder for the detail page item.
+  /// This allows customization of how each item is displayed on the detail
+  /// page. This only adds more content to the detail page, it does not
+  /// replace the default content.
+  final DetailPageItemBuilder? detailPageItemBuilder;
 
   /// A builder for primary action buttons, like the 'Save' button.
   ///
@@ -99,3 +106,9 @@ typedef PrimaryButtonBuilder = Widget Function(
   required bool isDisabled,
   required Widget child,
 });
+
+/// A builder for the detail page item.
+typedef DetailPageItemBuilder = Widget Function(
+  BuildContext context,
+  CatalogItem item,
+);

@@ -171,11 +171,29 @@ abstract class FlutterCatalogLocalizations {
   /// **'Posted since {date}'**
   String postedSince(Object date);
 
+  /// No description provided for @editItemButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get editItemButton;
+
+  /// No description provided for @contactUserDisabledMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot contact the author of this item.'**
+  String get contactUserDisabledMessage;
+
   /// No description provided for @itemCreatePageTitle.
   ///
   /// In en, this message translates to:
   /// **'Create Item'**
   String get itemCreatePageTitle;
+
+  /// No description provided for @priceFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get priceFree;
 
   /// No description provided for @itemEditPageTitle.
   ///

@@ -46,7 +46,17 @@ class FlutterCatalogLocalizationsEn extends FlutterCatalogLocalizations {
   }
 
   @override
+  String get editItemButton => 'Edit';
+
+  @override
+  String get contactUserDisabledMessage =>
+      'You cannot contact the author of this item.';
+
+  @override
   String get itemCreatePageTitle => 'Create Item';
+
+  @override
+  String get priceFree => 'Free';
 
   @override
   String get itemEditPageTitle => 'Edit Item';

@@ -19,6 +19,7 @@ class CatalogOptions {
     this.builders = const CatalogBuilders(),
     this.theme = const CatalogTheme(),
     this.translations = const CatalogTranslations.empty(),
+    this.onPressContactUser,
     this.filterOptions,
     this.onNoItems,
   })  : catalogRepository = catalogRepository ?? MemoryCatalogRepository(),
@@ -50,6 +51,9 @@ class CatalogOptions {
   /// in an empty list.
   final VoidCallback? onNoItems;
 
+  /// A callback to execute when the user wants to contact the author.
+  final void Function(CatalogUser user)? onPressContactUser;
+
   /// An optional filter configuration for managing item filtering.
   final FilterOptions? filterOptions;
 
@@ -62,6 +66,7 @@ class CatalogOptions {
     CatalogTranslations? translations,
     VoidCallback? onNoItems,
     FilterOptions? filterOptions,
+    void Function(CatalogUser user)? onPressContactUser,
   }) =>
       CatalogOptions(
         catalogRepository: catalogRepository ?? this.catalogRepository,
@@ -70,6 +75,7 @@ class CatalogOptions {
         translations: translations ?? this.translations,
         onNoItems: onNoItems ?? this.onNoItems,
         filterOptions: filterOptions ?? this.filterOptions,
+        onPressContactUser: onPressContactUser ?? this.onPressContactUser,
       );
 }
 

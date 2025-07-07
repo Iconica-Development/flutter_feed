@@ -1,7 +1,9 @@
 import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
 import "package:flutter_catalog/l10n/app_localizations.dart";
+import "package:flutter_catalog/src/config/screen_types.dart";
 import "package:flutter_catalog/src/utils/scope.dart";
+import "package:flutter_catalog/src/widgets/image_view_carousel.dart";
 import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:intl/intl.dart";
@@ -28,9 +30,19 @@ class CatalogDetailView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var scope = CatalogScope.of(context);
+    var options = scope.options;
     var service = scope.catalogService;
     var isAuthor = scope.userId == item.authorId;
     var isFavorite = useState(item.isFavorited ?? false);
+
+    // ignore: discarded_futures
+    var authorFuture = useMemoized(
+      () async => item.authorId != null
+          ? options.catalogUserRepository.getUser(item.authorId!)
+          : Future.value(null),
+      [item.authorId],
+    );
+    var authorSnapshot = useFuture(authorFuture);
 
     useEffect(
       () {
@@ -54,16 +66,13 @@ class CatalogDetailView extends HookWidget {
       }
     }
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: onExit,
-        ),
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        actions: [
+    var appBar = AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: onExit,
+      ),
+      actions: [
+        if (!isAuthor) ...[
           IconButton(
             icon: Icon(
               isFavorite.value ? Icons.favorite : Icons.favorite_border,
@@ -71,165 +80,226 @@ class CatalogDetailView extends HookWidget {
             ),
             onPressed: toggleFavorite,
           ),
-          if (isAuthor)
-            IconButton(
-              icon: const Icon(Icons.edit),
-              // Call the new callback when pressed
-              onPressed: () => onEditItem(item),
-            ),
         ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _ImageCarousel(mediaUrls: item.imageUrls),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _AuthorSection(item: item),
-                  const SizedBox(height: 24),
-                  _InfoSection(item: item),
-                  const SizedBox(height: 24),
-                  _TagsSection(),
-                  const SizedBox(height: 24),
-                  _MapSection(),
-                ],
-              ),
+      ],
+    );
+
+    var body = SingleChildScrollView(
+      child: isAuthor
+          ? _MyItemDetailBody(
+              item: item,
+              onEditItem: onEditItem,
+            )
+          : _OtherUserItemDetailBody(
+              item: item,
+              author: authorSnapshot.data,
             ),
-            _PostedDate(date: item.postedAt),
-          ],
-        ),
-      ),
+    );
+
+    if (options.builders.baseScreenBuilder != null) {
+      return options.builders.baseScreenBuilder!(
+        context,
+        ScreenType.catalogDetail,
+        appBar,
+        item.title,
+        body,
+      );
+    }
+
+    return Scaffold(
+      appBar: appBar,
+      body: body,
     );
   }
 }
 
-// --- Private Helper Widgets ---
-
-class _ImageCarousel extends HookWidget {
-  const _ImageCarousel({required this.mediaUrls});
-  final List<String> mediaUrls;
-
-  @override
-  Widget build(BuildContext context) {
-    var pageController = usePageController();
-    var currentPage = useState(0);
-
-    useEffect(
-      () {
-        void listener() {
-          if (pageController.page?.round() != currentPage.value) {
-            currentPage.value = pageController.page!.round();
-          }
-        }
-
-        pageController.addListener(listener);
-        return () => pageController.removeListener(listener);
-      },
-      [pageController],
-    );
-
-    return SizedBox(
-      height: 320,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          PageView.builder(
-            controller: pageController,
-            itemCount: mediaUrls.length,
-            itemBuilder: (context, index) => CachedNetworkImage(
-              imageUrl: mediaUrls[index],
-              fit: BoxFit.cover,
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-              placeholder: (context, url) => const Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
-            ),
-          ),
-          // Page indicator dots
-          if (mediaUrls.length > 1)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  mediaUrls.length,
-                  (index) => Container(
-                    width: 8.0,
-                    height: 8.0,
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: currentPage.value == index
-                          ? Colors.white
-                          : Colors.white.withOpacity(0.5),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _AuthorSection extends StatelessWidget {
-  const _AuthorSection({required this.item});
+/// The layout for viewing an item owned by the current user.
+class _MyItemDetailBody extends StatelessWidget {
+  const _MyItemDetailBody({required this.item, required this.onEditItem});
   final CatalogItem item;
+  final void Function(CatalogItem item) onEditItem;
 
   @override
   Widget build(BuildContext context) {
-    var localizations = FlutterCatalogLocalizations.of(context)!;
-    var textTheme = Theme.of(context).textTheme;
+    var options = CatalogScope.of(context).options;
 
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // CircleAvatar(
-        //   radius: 24,
-        //   backgroundImage: (item.authorProfileImageUrl != null)
-        //       ? CachedNetworkImageProvider(item.authorProfileImageUrl!)
-        //       : null,
-        //   child: (item.authorProfileImageUrl == null)
-        //       ? const Icon(Icons.person)
-        //       : null,
-        // ),
-        const SizedBox(width: 12),
-        Expanded(
+        ImageCarousel(mediaUrls: item.imageUrls),
+        _TitleSection(item: item),
+        _EditSection(onEdit: () => onEditItem(item)),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 24,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                item.authorId ?? "Unknown User",
-                style: textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const Row(
-                children: [
-                  Icon(Icons.star, size: 16, color: Colors.amber),
-                  Icon(Icons.star, size: 16, color: Colors.amber),
-                  Icon(Icons.star, size: 16, color: Colors.amber),
-                  Icon(Icons.star_half, size: 16, color: Colors.amber),
-                  Icon(Icons.star_border, size: 16, color: Colors.amber),
-                ],
-              ),
+              if (item.description.isNotEmpty) ...[
+                _DescriptionSection(item: item),
+                const SizedBox(height: 24),
+              ],
+              if (item.customFields.isNotEmpty) ...[
+                _TagsSection(customFields: item.customFields),
+                const SizedBox(height: 24),
+              ],
+              if (options.builders.detailPageItemBuilder != null)
+                options.builders.detailPageItemBuilder!(context, item)
+              else
+                _MapSection(),
+              const SizedBox(height: 18),
+              _PostedDate(date: item.postedAt),
             ],
           ),
-        ),
-        FilledButton(
-          onPressed: () {},
-          child: Text(localizations.sendMessageButton),
         ),
       ],
     );
   }
 }
 
-class _InfoSection extends StatelessWidget {
-  const _InfoSection({required this.item});
+class _TitleSection extends StatelessWidget {
+  const _TitleSection({
+    required this.item,
+  });
+
+  final CatalogItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    var options = CatalogScope.of(context).options;
+    var localizations = FlutterCatalogLocalizations.of(context)!;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: options.theme.authorSectionBackgroundColor ??
+            Theme.of(context).colorScheme.primary.withOpacity(0.4),
+      ),
+      padding: const EdgeInsets.all(20),
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            item.title,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            item.price != null && item.price! > 0
+                ? "€${item.price!.toStringAsFixed(2)}"
+                : localizations.priceFree,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The layout for viewing an item owned by another user.
+class _OtherUserItemDetailBody extends StatelessWidget {
+  const _OtherUserItemDetailBody({required this.item, this.author});
+  final CatalogItem item;
+  final CatalogUser? author;
+
+  @override
+  Widget build(BuildContext context) {
+    var options = CatalogScope.of(context).options;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ImageCarousel(mediaUrls: item.imageUrls),
+        _AuthorSection(author: author),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 24,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _DescriptionSection(item: item),
+              const SizedBox(height: 24),
+              if (item.customFields.isNotEmpty) ...[
+                _TagsSection(customFields: item.customFields),
+                const SizedBox(height: 24),
+              ],
+              if (options.builders.detailPageItemBuilder != null)
+                options.builders.detailPageItemBuilder!(context, item)
+              else
+                _MapSection(),
+              const SizedBox(height: 24),
+              _PostedDate(date: item.postedAt),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AuthorSection extends StatelessWidget {
+  const _AuthorSection({required this.author});
+  final CatalogUser? author;
+
+  @override
+  Widget build(BuildContext context) {
+    var options = CatalogScope.of(context).options;
+    var localizations = FlutterCatalogLocalizations.of(context)!;
+    var textTheme = Theme.of(context).textTheme;
+    var backgroundColor = options.theme.authorSectionBackgroundColor ??
+        Theme.of(context).colorScheme.primary.withOpacity(0.4);
+
+    return Container(
+      color: backgroundColor,
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 24,
+            backgroundImage: (author?.avatarUrl?.isNotEmpty ?? false)
+                ? CachedNetworkImageProvider(author!.avatarUrl!)
+                : null,
+            child: (author?.avatarUrl?.isEmpty ?? true)
+                ? const Icon(Icons.person)
+                : null,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              author?.name ?? "Unknown User",
+              style:
+                  textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ),
+          if (author != null) ...[
+            options.builders.primaryButtonBuilder(
+              context,
+              onPressed: () => options.onPressContactUser?.call(author!),
+              onDisabledPressed: () {
+                if (options.onPressContactUser == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(localizations.contactUserDisabledMessage),
+                    ),
+                  );
+                }
+              },
+              isDisabled: options.onPressContactUser == null,
+              child: Text(localizations.sendMessageButton),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _DescriptionSection extends StatelessWidget {
+  const _DescriptionSection({required this.item});
   final CatalogItem item;
 
   @override
@@ -240,44 +310,49 @@ class _InfoSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(item.title, style: textTheme.headlineMedium),
-        const SizedBox(height: 4),
         Text(
-          item.price?.toStringAsFixed(2) ?? "Free",
-          style: textTheme.titleLarge
-              ?.copyWith(color: Theme.of(context).colorScheme.primary),
+          localizations.detailDescriptionTitle,
+          style: textTheme.titleSmall,
         ),
-        if (item.description.isNotEmpty) ...[
-          const SizedBox(height: 16),
-          Text(
-            localizations.detailDescriptionTitle,
-            style: textTheme.titleLarge,
-          ),
-          const SizedBox(height: 8),
-          Text(item.description, style: textTheme.bodyMedium),
-        ],
+        const SizedBox(height: 8),
+        Text(item.description, style: textTheme.bodyMedium),
       ],
     );
   }
 }
 
 class _TagsSection extends StatelessWidget {
+  const _TagsSection({required this.customFields});
+  final Map<String, dynamic> customFields;
+
   @override
   Widget build(BuildContext context) {
     var localizations = FlutterCatalogLocalizations.of(context)!;
     var textTheme = Theme.of(context).textTheme;
+    var chips = <Widget>[];
 
-    var tags = ["Categorie", "Merk", "4-6 jaar", "Conditie"];
+    customFields.forEach((key, value) {
+      if (value is String) {
+        chips.add(Chip(label: Text(value)));
+      } else if (value is List) {
+        for (var val in value) {
+          chips.add(Chip(label: Text(val.toString())));
+        }
+      }
+    });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(localizations.characteristicsTitle, style: textTheme.titleLarge),
+        Text(
+          localizations.characteristicsTitle,
+          style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 8),
         Wrap(
           spacing: 8.0,
           runSpacing: 4.0,
-          children: tags.map((tag) => Chip(label: Text(tag))).toList(),
+          children: chips,
         ),
       ],
     );
@@ -312,6 +387,37 @@ class _MapSection extends StatelessWidget {
   }
 }
 
+class _EditSection extends StatelessWidget {
+  const _EditSection({required this.onEdit});
+  final VoidCallback onEdit;
+
+  @override
+  Widget build(BuildContext context) {
+    var localizations = FlutterCatalogLocalizations.of(context)!;
+    return InkWell(
+      onTap: onEdit,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+        ),
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Column(
+            children: [
+              const Icon(Icons.edit, size: 24),
+              const SizedBox(height: 4),
+              Text(localizations.editItemButton),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _PostedDate extends StatelessWidget {
   const _PostedDate({this.date});
   final DateTime? date;
@@ -323,13 +429,11 @@ class _PostedDate extends StatelessWidget {
     var localizations = FlutterCatalogLocalizations.of(context)!;
     var formattedDate = DateFormat.yMd().format(date!);
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Center(
-        child: Text(
-          localizations.postedSince(formattedDate),
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        localizations.postedSince(formattedDate),
+        style: Theme.of(context).textTheme.bodySmall,
       ),
     );
   }

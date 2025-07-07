@@ -6,6 +6,7 @@ class CatalogTheme {
   /// Constructs a [CatalogTheme].
   const CatalogTheme({
     this.filterBarBackgroundColor,
+    this.authorSectionBackgroundColor,
   });
 
   /// The background color of the persistent filter bar on the overview screen.
@@ -13,4 +14,8 @@ class CatalogTheme {
   /// If not provided, it defaults to
   /// `Theme.of(context).colorScheme.secondaryContainer`.
   final Color? filterBarBackgroundColor;
+
+  /// The background color of the author section on the detail page.
+  /// If not provided, it defaults to a semi-transparent primary color.
+  final Color? authorSectionBackgroundColor;
 }
