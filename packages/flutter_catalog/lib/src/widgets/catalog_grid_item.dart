@@ -9,12 +9,16 @@ class CatalogGridItem extends StatelessWidget {
   /// Creates a widget to display a [CatalogItem] in a grid.
   const CatalogGridItem({
     required this.item,
+    required this.author,
     super.key,
     this.onTap,
   });
 
   /// The catalog item to display.
   final CatalogItem item;
+
+  /// The author of the item, if available.
+  final CatalogUser? author;
 
   /// A callback that is executed when the item is tapped.
   final VoidCallback? onTap;
@@ -81,7 +85,7 @@ class CatalogGridItem extends StatelessWidget {
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
-                          item.authorId ?? "Unknown",
+                          author?.name ?? item.authorId ?? "Unknown",
                           style: textTheme.bodySmall,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

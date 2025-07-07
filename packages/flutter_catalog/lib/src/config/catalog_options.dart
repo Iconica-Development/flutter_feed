@@ -61,6 +61,7 @@ class CatalogOptions {
   /// with the new values.
   CatalogOptions copyWith({
     CatalogRepository? catalogRepository,
+    CatalogUserRepository? catalogUserRepository,
     CatalogBuilders? builders,
     CatalogTheme? theme,
     CatalogTranslations? translations,
@@ -70,6 +71,8 @@ class CatalogOptions {
   }) =>
       CatalogOptions(
         catalogRepository: catalogRepository ?? this.catalogRepository,
+        catalogUserRepository:
+            catalogUserRepository ?? this.catalogUserRepository,
         builders: builders ?? this.builders,
         theme: theme ?? this.theme,
         translations: translations ?? this.translations,

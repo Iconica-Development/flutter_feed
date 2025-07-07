@@ -33,4 +33,10 @@ class MemoryCatalogUserRepository implements CatalogUserRepository {
     await Future.delayed(const Duration(milliseconds: 150));
     return _users.where((user) => user.id == userId).firstOrNull;
   }
+
+  @override
+  Future<List<CatalogUser>> getUsers(List<String> userIds) async {
+    await Future.delayed(const Duration(milliseconds: 150));
+    return _users.where((user) => userIds.contains(user.id)).toList();
+  }
 }

@@ -252,6 +252,28 @@ class _Body extends HookWidget {
     );
     var snapshot = useFuture(itemsFuture);
 
+    // ignore: discarded_futures
+    var usersFuture = useMemoized(
+      () async {
+        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          var authorIds = snapshot.data!
+              .map((item) => item.authorId)
+              .whereType<String>()
+              .toSet()
+              .toList();
+          if (authorIds.isNotEmpty) {
+            return scope.options.catalogUserRepository.getUsers(authorIds);
+          }
+        }
+        return Future.value(<CatalogUser>[]);
+      },
+      [snapshot.data],
+    );
+    var usersSnapshot = useFuture(usersFuture);
+    var usersMap = {
+      for (var user in usersSnapshot.data ?? <CatalogUser>[]) user.id: user,
+    };
+
     if (snapshot.connectionState == ConnectionState.waiting) {
       return builders.loadingIndicatorBuilder?.call(context) ??
           const Center(child: CircularProgressIndicator.adaptive());
@@ -296,10 +318,13 @@ class _Body extends HookWidget {
             itemCount: items.length,
             itemBuilder: (context, index) {
               var item = items[index];
+              var author = usersMap[item.authorId];
+
               return builders.itemCardBuilder
                       ?.call(context, item, () => onPressItem(item)) ??
                   CatalogGridItem(
                     item: item,
+                    author: author,
                     onTap: () => onPressItem(item),
                   );
             },

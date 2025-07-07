@@ -42,6 +42,7 @@ class CatalogDetailView extends HookWidget {
           : Future.value(null),
       [item.authorId],
     );
+
     var authorSnapshot = useFuture(authorFuture);
 
     useEffect(

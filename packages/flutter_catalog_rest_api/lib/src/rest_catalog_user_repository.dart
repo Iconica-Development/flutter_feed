@@ -16,6 +16,7 @@ class RestCatalogUserRepository<T extends CatalogUser> extends HttpApiService<T>
     super.client,
     super.defaultHeaders,
     this.apiPrefix = "",
+    this.getUsersEndpoint = "/users",
     this.getUserEndpoint = "/users/:id",
   }) : super(
           // The converter now uses the provided factory.
@@ -30,6 +31,9 @@ class RestCatalogUserRepository<T extends CatalogUser> extends HttpApiService<T>
 
   /// The common prefix for all API endpoints in this repository.
   final String apiPrefix;
+
+  /// The endpoint for fetching a list of users.
+  final String getUsersEndpoint;
 
   /// The endpoint for fetching a user by their ID.
   final String getUserEndpoint;
@@ -55,6 +59,27 @@ class RestCatalogUserRepository<T extends CatalogUser> extends HttpApiService<T>
         error: e,
         stackTrace: s,
       );
+    }
+  }
+
+  @override
+  Future<List<T>> getUsers(List<String> userIds) async {
+    var listConverter = ModelListJsonResponseConverter<T, T>(
+      deserialize: fromJsonFactory,
+      serialize: (user) => user.toJson(),
+    );
+
+    var usersEndpoint = endpoint(apiPrefix)
+        .child(getUsersEndpoint)
+        .authenticate()
+        .withConverter(listConverter);
+    try {
+      var response = await usersEndpoint.get(
+        queryParameters: {"ids": userIds.join(",")},
+      );
+      return response.result ?? [];
+    } on ApiException {
+      rethrow;
     }
   }
 }
