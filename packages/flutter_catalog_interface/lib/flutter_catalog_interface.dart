@@ -4,5 +4,7 @@
 library flutter_catalog_interface;
 
 export "src/models/catalog_item.dart";
+export "src/models/catalog_user.dart";
 export "src/models/lat_lng.dart";
 export "src/repositories/catalog_repository.dart";
+export "src/repositories/catalog_user_repository.dart";

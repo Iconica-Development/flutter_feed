@@ -4,6 +4,7 @@ import "package:flutter_catalog/src/config/catalog_builders.dart";
 import "package:flutter_catalog/src/config/catalog_theme.dart";
 import "package:flutter_catalog/src/config/catalog_translations.dart";
 import "package:flutter_catalog/src/repositories/memory_catalog_repository.dart";
+import "package:flutter_catalog/src/repositories/memory_catalog_user_repository.dart";
 import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 
 /// A comprehensive configuration class for the Catalog User Story.
@@ -14,17 +15,25 @@ class CatalogOptions {
   /// Constructs a [CatalogOptions].
   CatalogOptions({
     CatalogRepository? catalogRepository,
+    CatalogUserRepository? catalogUserRepository,
     this.builders = const CatalogBuilders(),
     this.theme = const CatalogTheme(),
     this.translations = const CatalogTranslations.empty(),
     this.filterOptions,
     this.onNoItems,
-  }) : catalogRepository = catalogRepository ?? MemoryCatalogRepository();
+  })  : catalogRepository = catalogRepository ?? MemoryCatalogRepository(),
+        catalogUserRepository =
+            catalogUserRepository ?? MemoryCatalogUserRepository();
 
   /// The repository for fetching and managing catalog item data.
   ///
   /// Defaults to an in-memory repository for easy setup and testing.
   final CatalogRepository catalogRepository;
+
+  /// The repository for fetching and managing user data.
+  ///
+  /// Defaults to an in-memory repository for easy setup and testing.
+  final CatalogUserRepository catalogUserRepository;
 
   /// A collection of builders to customize the UI components.
   final CatalogBuilders builders;
