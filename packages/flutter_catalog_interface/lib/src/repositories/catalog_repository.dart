@@ -2,6 +2,8 @@ import "package:cross_file/cross_file.dart";
 import "package:flutter_catalog_interface/src/models/catalog_item.dart";
 import "package:flutter_catalog_interface/src/models/lat_lng.dart";
 
+export "package:cross_file/cross_file.dart" show XFile;
+
 /// The interface for interacting with the catalog.
 abstract class CatalogRepository<T extends CatalogItem> {
   /// Creates a new catalog item from a map.

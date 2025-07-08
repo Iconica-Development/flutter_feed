@@ -1,4 +1,3 @@
-import "package:cross_file/cross_file.dart";
 import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 
 /// A service class to manage catalog-related operations.

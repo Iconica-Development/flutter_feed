@@ -1,12 +1,10 @@
 import "dart:convert";
 
-import "package:cross_file/cross_file.dart";
 import "package:dart_api_service/dart_api_service.dart" as http;
 import "package:dart_api_service/dart_api_service.dart";
 import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 import "package:flutter_catalog_rest_api/src/rest_converters.dart";
 
-export "package:cross_file/cross_file.dart" show XFile;
 export "package:dart_api_service/dart_api_service.dart" show Client;
 
 /// A generic implementation of [CatalogRepository] that uses a RESTful API.

@@ -21,6 +21,16 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: "pub"
+    directory: "/packages/flutter_catalog_rest_api"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pub"
+    directory: "/packages/flutter_catalog_riverpod"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pub"
     directory: "/packages/flutter_feed_utils"
     schedule:
       interval: "weekly"

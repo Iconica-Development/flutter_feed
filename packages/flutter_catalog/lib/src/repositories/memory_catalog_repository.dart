@@ -1,5 +1,4 @@
 import "dart:math";
-import "package:cross_file/cross_file.dart";
 import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 
 /// An in-memory implementation of the [CatalogRepository].

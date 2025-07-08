@@ -1,6 +1,5 @@
 import "package:flutter_catalog/l10n/app_localizations.dart";
 import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
-import "package:image_picker/image_picker.dart";
 
 /// A data class to manage the state of the item modification form.
 class ItemModificationData {
