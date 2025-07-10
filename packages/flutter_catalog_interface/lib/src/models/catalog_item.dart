@@ -44,6 +44,7 @@ class CatalogItem {
       price: (json["price"] as num?)?.toDouble(),
       authorId: json["authorId"] as String?,
       isFavorited: json["isFavorited"] as bool?,
+      distanceKM: (json["distanceKM"] as num?)?.toDouble(),
       customFields: customFields,
     );
   }

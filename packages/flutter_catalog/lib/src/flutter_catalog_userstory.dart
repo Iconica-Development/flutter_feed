@@ -21,6 +21,7 @@ class FlutterCatalogUserstory extends _BaseCatalogNavigatorUserstory {
   const FlutterCatalogUserstory({
     required super.userId,
     required super.options,
+    super.userLocation,
     super.onExit,
     super.key,
   });
@@ -41,6 +42,7 @@ class FlutterCatalogDetailUserstory extends _BaseCatalogNavigatorUserstory {
     required super.userId,
     required super.options,
     required this.item,
+    super.userLocation,
     super.onExit,
     super.key,
   });
@@ -63,6 +65,7 @@ class FlutterCatalogModifyUserstory extends _BaseCatalogNavigatorUserstory {
   const FlutterCatalogModifyUserstory({
     required super.userId,
     required super.options,
+    super.userLocation,
     this.initialItem,
     super.onExit,
     super.key,
@@ -87,12 +90,18 @@ abstract class _BaseCatalogNavigatorUserstory extends HookWidget {
   const _BaseCatalogNavigatorUserstory({
     required this.userId,
     required this.options,
+    this.userLocation,
     this.onExit,
     super.key,
   });
 
   /// The user ID of the person starting the catalog user story.
   final String userId;
+
+  /// The user's current location, if available.
+  /// This is used to fetch location-based catalog items.
+  /// If `null`, location-based features are disabled.
+  final LatLng? userLocation;
 
   /// The catalog user story configuration.
   final CatalogOptions options;
@@ -111,6 +120,7 @@ abstract class _BaseCatalogNavigatorUserstory extends HookWidget {
       () => CatalogService(
         repository: options.catalogRepository,
         userId: userId,
+        userLocation: userLocation,
       ),
       [options.catalogRepository],
     );

@@ -9,6 +9,7 @@ class CatalogService<T extends CatalogItem> {
   CatalogService({
     required CatalogRepository<T> repository,
     required this.userId,
+    required this.userLocation,
   }) : _repository = repository;
 
   final CatalogRepository<T> _repository;
@@ -16,9 +17,11 @@ class CatalogService<T extends CatalogItem> {
   /// The ID of the user for whom catalog operations are performed.
   final String userId;
 
+  /// The user's current location, if available.
+  final LatLng? userLocation;
+
   /// Retrieves catalog items, optionally applying filters and user location.
   Future<List<T>> fetchCatalogItems({
-    LatLng? userLocation,
     Map<String, dynamic>? filters,
     int? limit,
     int? offset,
@@ -40,8 +43,13 @@ class CatalogService<T extends CatalogItem> {
       _repository.fetchCatalogItemById(id, userId);
 
   /// Creates a new catalog item.
-  Future<void> createCatalogItem(Map<String, dynamic> item) async =>
-      _repository.createCatalogItem(item);
+  Future<void> createCatalogItem(Map<String, dynamic> item) async {
+    var dataWithLocation = Map<String, dynamic>.from(item);
+    if (userLocation != null) {
+      dataWithLocation["location"] = userLocation!.toJson();
+    }
+    return _repository.createCatalogItem(dataWithLocation);
+  }
 
   /// Updates an existing catalog item by its ID.
   Future<void> updateCatalogItem(

@@ -100,7 +100,7 @@ class CatalogGridItem extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          "${item.distanceKM} km",
+                          "${item.distanceKM?.toStringAsFixed(1)} km",
                           style: textTheme.bodySmall,
                         ),
                       ],
