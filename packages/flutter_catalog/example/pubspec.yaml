@@ -1,0 +1,29 @@
+name: flutter_catalog_example
+description: "Flutter Feed Catalog Example Application"
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_catalog:
+    path: ../
+
+dependency_overrides:
+  flutter_hooks: 0.20.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_iconica_analysis:
+    hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
+    version: ^7.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
