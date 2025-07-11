@@ -7,6 +7,7 @@ export "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 
 export "/l10n/app_localizations.dart";
 export "src/config/catalog_builders.dart";
+export "src/config/catalog_filter_options.dart";
 export "src/config/catalog_options.dart";
 export "src/config/catalog_theme.dart";
 export "src/config/catalog_translations.dart";

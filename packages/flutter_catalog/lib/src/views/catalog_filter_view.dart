@@ -2,17 +2,25 @@ import "package:dart_feed_utilities/filters.dart";
 import "package:flutter/material.dart";
 import "package:flutter_catalog/l10n/app_localizations.dart";
 import "package:flutter_catalog/src/config/screen_types.dart";
+import "package:flutter_catalog/src/routes.dart";
 import "package:flutter_catalog/src/utils/scope.dart";
-import "package:flutter_catalog/src/views/catalog_sub_filter_view.dart";
+import "package:flutter_catalog/src/widgets/inputs/checkbox_input_section.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 
 /// A view that allows the user to configure and apply filters.
 class CatalogFilterView extends HookWidget {
   /// Creates a [CatalogFilterView].
-  const CatalogFilterView({super.key, this.onExit});
+  const CatalogFilterView({
+    required this.onNavigateToSubFilter,
+    this.onExit,
+    super.key,
+  });
 
   /// The callback to execute when the user leaves the screen.
   final VoidCallback? onExit;
+
+  /// A callback to handle navigating to a sub-filter selection screen.
+  final NavigateToSubFilterCallback onNavigateToSubFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +37,25 @@ class CatalogFilterView extends HookWidget {
     );
     var snapshot = useStream(filtersStream);
 
+    void applyFilters() {
+      localFilterValues.value.forEach((filterId, value) async {
+        if (value != null) {
+          var filter = snapshot.data!
+              .firstWhere((f) => f.filterModel.id == filterId)
+              .filterModel;
+          await filterService.setFilterValue(filter, value);
+        }
+      });
+      onExit?.call();
+    }
+
     useEffect(
       () {
-        if (!snapshot.hasData) return;
-        var newValues = {
-          for (var filterWithValue in snapshot.data!)
-            filterWithValue.filterModel.id: filterWithValue.value?.value,
-        };
-        localFilterValues.value = newValues;
+        if (snapshot.hasData) {
+          localFilterValues.value = {
+            for (var f in snapshot.data!) f.filterModel.id: f.value?.value,
+          };
+        }
         return;
       },
       [snapshot.data],
@@ -69,6 +88,8 @@ class CatalogFilterView extends HookWidget {
         : _FilterBody(
             filters: displayableFilters ?? [],
             localFilterValues: localFilterValues,
+            onApplyFilters: applyFilters,
+            onNavigateToSubFilter: onNavigateToSubFilter,
           );
 
     if (options.builders.baseScreenBuilder != null) {
@@ -92,75 +113,60 @@ class _FilterBody extends StatelessWidget {
   const _FilterBody({
     required this.filters,
     required this.localFilterValues,
+    required this.onApplyFilters,
+    required this.onNavigateToSubFilter,
   });
 
   final List<FilterWithValue> filters;
   final ValueNotifier<Map<String, dynamic>> localFilterValues;
-
-  void _applyFilters(BuildContext context) {
-    var scope = CatalogScope.of(context);
-    var filterService = scope.filterService;
-
-    localFilterValues.value.forEach((filterId, value) async {
-      var filter =
-          filters.firstWhere((f) => f.filterModel.id == filterId).filterModel;
-
-      if (value != null) {
-        await filterService.setFilterValue(filter, value);
-      }
-    });
-
-    Navigator.of(context).pop();
-  }
+  final VoidCallback onApplyFilters;
+  final NavigateToSubFilterCallback onNavigateToSubFilter;
 
   @override
   Widget build(BuildContext context) {
     var localizations = FlutterCatalogLocalizations.of(context)!;
     var options = CatalogScope.of(context).options;
+    var builders = options.builders;
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: filters.length,
-              itemBuilder: (context, index) {
-                var filterWithValue = filters[index];
-                var filter = filterWithValue.filterModel;
-                var child =
-                    _buildFilterControls(context, filter, localFilterValues);
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: filters.length,
+            itemBuilder: (context, index) {
+              var filterWithValue = filters[index];
+              var filter = filterWithValue.filterModel;
 
-                return options.builders.filterSectionBuilder?.call(
-                      context,
-                      filter.name,
-                      child,
-                    ) ??
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          child: Text(
-                            filter.name,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                        ),
-                        child,
-                      ],
-                    );
-              },
-            ),
+              var translatedName =
+                  options.filterOptions?.translator?.call(filter.name) ??
+                      filter.name;
+              var child = _buildFilterControls(
+                context,
+                filter,
+                translatedName,
+                localFilterValues,
+              );
+
+              return builders.filterSectionBuilder?.call(
+                    context,
+                    translatedName,
+                    child,
+                  ) ??
+                  child;
+            },
           ),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: () => _applyFilters(context),
-              child: Text(localizations.applyFiltersButton),
-            ),
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: builders.primaryButtonBuilder(
+            context,
+            onPressed: () => onApplyFilters,
+            isDisabled: false,
+            onDisabledPressed: () {},
+            child: Text(localizations.applyFiltersButton),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -168,44 +174,118 @@ class _FilterBody extends StatelessWidget {
   Widget _buildFilterControls(
     BuildContext context,
     FilterModel filter,
+    String translatedName,
     ValueNotifier<Map<String, dynamic>> localFilterValues,
   ) =>
       switch (filter) {
-        BooleanSelectFilter() => _buildBooleanFilter(context, filter),
-        MinMaxIntFilter() => _buildMinMaxIntFilter(context, filter),
-        DataSourceMultiSelectFilter() =>
-          _buildDataSourceFilter(context, filter, localFilterValues),
-        _ => ListTile(
-            title: const Text("More options"),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {},
-          )
+        BooleanSelectFilter _ => _BooleanFilterSwitch(
+            filter: filter,
+            translatedName: translatedName,
+            localFilterValues: localFilterValues,
+          ),
+        MinMaxIntFilter _ => _RangeSliderFilter(
+            filter: filter,
+            translatedName: translatedName,
+            localFilterValues: localFilterValues,
+          ),
+        DataSourceMultiSelectFilter f when f.isNested || f.isSearchEnabled =>
+          _NavigableFilter(
+            filter: filter,
+            translatedName: translatedName,
+            localFilterValues: localFilterValues,
+            onNavigateToSubFilter: onNavigateToSubFilter,
+          ),
+        DataSourceMultiSelectFilter _ => _DataSourceCheckboxFilter(
+            filter: filter,
+            translatedName: translatedName,
+            localFilterValues: localFilterValues,
+          ),
+        _ => const SizedBox.shrink(),
       };
+}
 
-  Widget _buildBooleanFilter(
-    BuildContext context,
-    BooleanSelectFilter filter,
-  ) =>
-      SwitchListTile(
-        title: Text(filter.name),
-        value: localFilterValues.value[filter.id] as bool? ?? false,
-        onChanged: (newValue) {
-          var newMap = Map<String, dynamic>.from(localFilterValues.value);
-          newMap[filter.id] = newValue;
-          localFilterValues.value = newMap;
-        },
-      );
+/// A new wrapper widget that fetches data for a filter and renders the
+/// generic CheckboxInputSection.
+class _DataSourceCheckboxFilter extends HookWidget {
+  const _DataSourceCheckboxFilter({
+    required this.filter,
+    required this.translatedName,
+    required this.localFilterValues,
+  });
 
-  Widget _buildMinMaxIntFilter(
-    BuildContext context,
-    MinMaxIntFilter filter,
-  ) {
-    var currentValue = localFilterValues.value[filter.id] as (int, int?)? ??
+  final DataSourceMultiSelectFilter filter;
+  final String translatedName;
+  final ValueNotifier<Map<String, dynamic>> localFilterValues;
+
+  @override
+  Widget build(BuildContext context) {
+    var scope = CatalogScope.of(context);
+    // Fetch the options (e.g., Conditions, Age Ranges) for this filter
+    // ignore: discarded_futures
+    var optionsFuture = useMemoized(
+      () async => scope.filterService.getDataForDatasource(filter.dataSource),
+      [filter.dataSource],
+    );
+    var snapshot = useFuture(optionsFuture);
+
+    if (!snapshot.hasData)
+      return const Center(child: CircularProgressIndicator.adaptive());
+
+    var options = snapshot.data!;
+    var currentSelection =
+        (localFilterValues.value[filter.id] as List<dynamic>?)
+                ?.cast<String>() ??
+            [];
+
+    var crossAxisCount = filter.metadata["gridCrossAxisCount"] as int? ?? 1;
+
+    return CheckboxInputSection<LinkedFilterData>(
+      title: translatedName,
+      options: options,
+      gridCrossAxisCount: crossAxisCount,
+      selectedKeys: currentSelection,
+      keySelector: (option) => option.key,
+      labelSelector: (option) => option.name,
+      isMultiSelect: filter.isMultiSelect,
+      onOptionToggled: (toggledKey) {
+        var newSelection = List<String>.from(currentSelection);
+        if (newSelection.contains(toggledKey)) {
+          newSelection.remove(toggledKey);
+        } else {
+          if (filter.isMultiSelect) {
+            newSelection.add(toggledKey);
+          } else {
+            newSelection = [toggledKey];
+          }
+        }
+        var newMap = Map<String, dynamic>.from(localFilterValues.value);
+        newMap[filter.id] = newSelection;
+        localFilterValues.value = newMap;
+      },
+    );
+  }
+}
+
+class _RangeSliderFilter extends StatelessWidget {
+  const _RangeSliderFilter({
+    required this.filter,
+    required this.translatedName,
+    required this.localFilterValues,
+  });
+  final MinMaxIntFilter filter;
+  final String translatedName;
+  final ValueNotifier<Map<String, dynamic>> localFilterValues;
+
+  @override
+  Widget build(BuildContext context) {
+    var currentValue = (localFilterValues.value[filter.id] as (int, int?)?) ??
         (filter.defaultValue, filter.isRange ? filter.defaultValue : null);
 
     if (filter.isRange) {
-      var currentRange =
-          RangeValues(currentValue.$1.toDouble(), currentValue.$2!.toDouble());
+      var currentRange = RangeValues(
+        currentValue.$1.toDouble(),
+        (currentValue.$2 ?? filter.max).toDouble(),
+      );
       return RangeSlider(
         values: currentRange,
         min: filter.min.toDouble(),
@@ -222,48 +302,79 @@ class _FilterBody extends StatelessWidget {
         },
       );
     } else {
-      return Slider(
-        value: currentValue.$1.toDouble(),
-        min: filter.min.toDouble(),
-        max: filter.max.toDouble(),
-        divisions: filter.max - filter.min,
-        label: currentValue.$1.toString(),
-        onChanged: (double value) {
-          var newMap = Map<String, dynamic>.from(localFilterValues.value);
-          newMap[filter.id] = (value.round(), null);
-          localFilterValues.value = newMap;
-        },
-      );
+      return const SizedBox.shrink();
     }
   }
+}
 
-  /// Builds a navigable list tile for data source filters.
-  Widget _buildDataSourceFilter(
-    BuildContext context,
-    DataSourceMultiSelectFilter filter,
-    ValueNotifier<Map<String, dynamic>> localFilterValues,
-  ) =>
-      HookBuilder(
-        builder: (context) {
-          var currentValues = useValueListenable(localFilterValues);
-          var selected = currentValues[filter.id] as List<dynamic>? ?? [];
+class _NavigableFilter extends StatelessWidget {
+  const _NavigableFilter({
+    required this.filter,
+    required this.translatedName,
+    required this.localFilterValues,
+    required this.onNavigateToSubFilter,
+  });
+  final DataSourceMultiSelectFilter filter;
+  final String translatedName;
+  final ValueNotifier<Map<String, dynamic>> localFilterValues;
+  final NavigateToSubFilterCallback onNavigateToSubFilter;
 
-          return ListTile(
-            title: Text(filter.name),
-            subtitle: selected.isNotEmpty
-                ? Text("${selected.length} selected")
-                : null,
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () async => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => CatalogSubFilterView(
-                  filter: filter,
-                  localFilterValues: localFilterValues,
-                  onExit: () => Navigator.of(context).pop(),
-                ),
-              ),
-            ),
-          );
-        },
-      );
+  @override
+  Widget build(BuildContext context) {
+    var currentSelection =
+        (localFilterValues.value[filter.id] as List<dynamic>?)
+                ?.cast<String>() ??
+            [];
+
+    return ListTile(
+      title: Text(filter.name),
+      subtitle: currentSelection.isNotEmpty
+          ? Text("${currentSelection.length} selected")
+          : null,
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () async {
+        var newSelection = await onNavigateToSubFilter.call(
+          context,
+          filter,
+          currentSelection,
+        );
+
+        // If the user confirmed a new selection, update the state.
+        if (newSelection != null) {
+          var newMap = Map<String, dynamic>.from(localFilterValues.value);
+          newMap[filter.id] = newSelection;
+          localFilterValues.value = newMap;
+        }
+      },
+    );
+  }
+}
+
+class _BooleanFilterSwitch extends StatelessWidget {
+  const _BooleanFilterSwitch({
+    required this.filter,
+    required this.translatedName,
+    required this.localFilterValues,
+  });
+
+  final BooleanSelectFilter filter;
+  final String translatedName;
+  final ValueNotifier<Map<String, dynamic>> localFilterValues;
+
+  @override
+  Widget build(BuildContext context) {
+    // Get the current value from the local state, defaulting to false.
+    var currentValue = localFilterValues.value[filter.id] as bool? ?? false;
+
+    return SwitchListTile(
+      title: Text(filter.name),
+      value: currentValue,
+      onChanged: (newValue) {
+        // Update the local state when the switch is toggled.
+        var newMap = Map<String, dynamic>.from(localFilterValues.value);
+        newMap[filter.id] = newValue;
+        localFilterValues.value = newMap;
+      },
+    );
+  }
 }

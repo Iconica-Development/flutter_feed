@@ -1,16 +1,18 @@
 import "package:flutter/material.dart";
 import "package:flutter_catalog/src/widgets/inputs/input_section.dart";
 
-///
+/// A generic widget that displays a section with a list of selectable
+/// checkboxes, arranged in a list or a grid.
 class CheckboxInputSection<T> extends StatelessWidget {
-  ///
+  /// Creates a [CheckboxInputSection].
   const CheckboxInputSection({
     required this.title,
     required this.options,
-    required this.selectedOptions,
+    required this.selectedKeys,
+    required this.keySelector,
+    required this.labelSelector,
     required this.onOptionToggled,
-    required this.optionLabelBuilder,
-    this.conditionalChildren,
+    this.isMultiSelect = true,
     this.mandatory = false,
     this.gridCrossAxisCount = 1,
     super.key,
@@ -19,100 +21,63 @@ class CheckboxInputSection<T> extends StatelessWidget {
   /// The title of the section.
   final String title;
 
-  /// Whether the section is mandatory.
-  final bool mandatory;
-
-  /// The options to display in the section.
+  /// The list of all available option objects.
   final List<T> options;
 
-  /// The currently selected options.
-  final List<T> selectedOptions;
+  /// A list of the keys of the currently selected options.
+  final List<String> selectedKeys;
 
-  /// Callback function to be called when an option is toggled.
-  final ValueChanged<T> onOptionToggled;
+  /// A function that returns a unique string key for a given option [T].
+  final String Function(T option) keySelector;
 
-  /// Function to build the label for each option.
-  final String Function(T) optionLabelBuilder;
+  /// A function that returns the display string for a given option [T].
+  final String Function(T option) labelSelector;
 
-  /// Optional map of conditional children widgets based on selected options.
-  final Map<T, Widget>? conditionalChildren;
+  /// A callback that is fired when a checkbox is toggled.
+  /// It returns the key of the toggled option.
+  final ValueChanged<String> onOptionToggled;
 
-  /// The number of columns in the grid layout.
+  /// Whether multiple options can be selected.
+  final bool isMultiSelect;
+
+  /// Whether the section is marked as mandatory.
+  final bool mandatory;
+
+  /// The number of columns to use if displayed as a grid.
   final int gridCrossAxisCount;
-
-  Widget _buildList(BuildContext context) {
-    var textTheme = Theme.of(context).textTheme;
-    return Column(
-      children: [
-        ...options.map(
-          (option) => CheckboxListTile(
-            title: Text(
-              optionLabelBuilder(option),
-              style: textTheme.labelSmall,
-            ),
-            value: selectedOptions.contains(option),
-            onChanged: (_) => onOptionToggled(option),
-            controlAffinity: ListTileControlAffinity.leading,
-            contentPadding: EdgeInsets.zero,
-            dense: true,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildGrid(BuildContext context) {
-    var textTheme = Theme.of(context).textTheme;
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: gridCrossAxisCount,
-        childAspectRatio: 3.5,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 0,
-      ),
-      itemCount: options.length,
-      itemBuilder: (context, index) {
-        var option = options[index];
-        return InkWell(
-          onTap: () => onOptionToggled(option),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Checkbox(
-                value: selectedOptions.contains(option),
-                onChanged: (_) => onOptionToggled(option),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  optionLabelBuilder(option),
-                  style: textTheme.labelSmall,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) => InputSection(
         title: title,
         mandatory: mandatory,
-        input: Column(
-          children: [
-            if (gridCrossAxisCount > 1)
-              _buildGrid(context)
-            else
-              _buildList(context),
-            if (conditionalChildren != null)
-              ...selectedOptions
-                  .where((opt) => conditionalChildren!.containsKey(opt))
-                  .map((opt) => conditionalChildren![opt]!),
-          ],
+        input: GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: gridCrossAxisCount,
+            childAspectRatio: 4,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 0,
+          ),
+          itemCount: options.length,
+          itemBuilder: (context, index) {
+            var option = options[index];
+            var key = keySelector(option);
+            var label = labelSelector(option);
+            var isSelected = selectedKeys.contains(key);
+
+            return InkWell(
+              onTap: () => onOptionToggled(key),
+              child: Row(
+                children: [
+                  Checkbox(
+                    value: isSelected,
+                    onChanged: (_) => onOptionToggled(key),
+                  ),
+                  Expanded(child: Text(label)),
+                ],
+              ),
+            );
+          },
         ),
       );
 }

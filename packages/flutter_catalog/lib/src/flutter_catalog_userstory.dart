@@ -9,7 +9,6 @@ import "package:flutter_catalog/src/routes.dart";
 import "package:flutter_catalog/src/services/catalog_service.dart";
 import "package:flutter_catalog/src/services/pop_handler.dart";
 import "package:flutter_catalog/src/utils/scope.dart";
-import "package:flutter_catalog/src/views/catalog_modify_view.dart";
 import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 
@@ -76,11 +75,9 @@ class FlutterCatalogModifyUserstory extends _BaseCatalogNavigatorUserstory {
 
   @override
   MaterialPageRoute buildInitialRoute(BuildContext context) =>
-      MaterialPageRoute(
-        builder: (context) => CatalogModifyView(
-          initialItem: initialItem,
-          onExit: onExit,
-        ),
+      catalogModifyRoute(
+        initialItem: initialItem,
+        onExit: onExit ?? () => Navigator.of(context).pop(),
       );
 }
 

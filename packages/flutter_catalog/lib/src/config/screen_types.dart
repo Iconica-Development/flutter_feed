@@ -11,6 +11,9 @@ enum ScreenType {
   /// The screen for selecting and applying filters.
   catalogFilter,
 
+  /// The screen for selecting sub-filters.
+  catalogSubFilter,
+
   /// The screen for modifying or updating a catalog item.
   catalogModify,
 }

@@ -1,6 +1,6 @@
-import "package:dart_feed_utilities/dart_feed_utilities.dart";
 import "package:flutter/material.dart";
 import "package:flutter_catalog/src/config/catalog_builders.dart";
+import "package:flutter_catalog/src/config/catalog_filter_options.dart";
 import "package:flutter_catalog/src/config/catalog_theme.dart";
 import "package:flutter_catalog/src/config/catalog_translations.dart";
 import "package:flutter_catalog/src/repositories/memory_catalog_repository.dart";
@@ -80,38 +80,4 @@ class CatalogOptions {
         filterOptions: filterOptions ?? this.filterOptions,
         onPressContactUser: onPressContactUser ?? this.onPressContactUser,
       );
-}
-
-/// A configuration class for managing filter-related repositories and options.
-class FilterOptions {
-  /// Constructs a [FilterOptions].
-  const FilterOptions({
-    this.showFiltersInOverview = true,
-    this.showSearchInOverview = true,
-    this.filterRepository,
-    this.filterValueRepository,
-    this.filterDataSourceRepository,
-    this.namespace,
-  });
-
-  /// Whether to show the filters in the overview screen.
-  /// If disabled the filter section on the overview screen will not be
-  /// displayed
-  final bool showFiltersInOverview;
-
-  /// Whether to show the search bar in the overview screen's AppBar.
-  /// Defaults to true.
-  final bool showSearchInOverview;
-
-  /// The repository for managing filter data.
-  final FilterRepository? filterRepository;
-
-  /// The repository for managing filter values.
-  final FilterValueRepository? filterValueRepository;
-
-  /// The repository for managing filter data sources.
-  final FilterDataSourceRepository? filterDataSourceRepository;
-
-  /// An optional namespace to scope the filters.
-  final String? namespace;
 }
