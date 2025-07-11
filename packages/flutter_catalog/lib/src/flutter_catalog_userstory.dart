@@ -119,10 +119,16 @@ abstract class _BaseCatalogNavigatorUserstory extends HookWidget {
     var catalogService = useMemoized(
       () => CatalogService(
         repository: options.catalogRepository,
+        userRepository: options.catalogUserRepository,
         userId: userId,
         userLocation: userLocation,
       ),
-      [options.catalogRepository],
+      [
+        options.catalogRepository,
+        options.catalogUserRepository,
+        userId,
+        userLocation,
+      ],
     );
 
     var filterService = useMemoized(

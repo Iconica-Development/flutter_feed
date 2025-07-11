@@ -6,13 +6,17 @@ import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 /// manipulate catalog data of type T.
 class CatalogService<T extends CatalogItem> {
   /// Creates a [CatalogService] with the given repository.
-  CatalogService({
+  const CatalogService({
     required CatalogRepository<T> repository,
+    required CatalogUserRepository<CatalogUser> userRepository,
     required this.userId,
     required this.userLocation,
-  }) : _repository = repository;
+  })  : _repository = repository,
+        _userRepository = userRepository;
 
   final CatalogRepository<T> _repository;
+
+  final CatalogUserRepository<CatalogUser> _userRepository;
 
   /// The ID of the user for whom catalog operations are performed.
   final String userId;
@@ -33,6 +37,21 @@ class CatalogService<T extends CatalogItem> {
         limit: limit,
         offset: offset,
       );
+
+  /// Fetches users for a list of catalog items.
+  Future<List<CatalogUser>> fetchUsersForItems(
+    List<T> items,
+  ) async {
+    var userIds =
+        items.map((item) => item.authorId).whereType<String>().toSet().toList();
+    return _userRepository.getUsers(userIds);
+  }
+
+  /// Retrieves a user for a specific catalog item.
+  Future<CatalogUser?> getUserForCatalogItem(T item) async {
+    if (item.authorId == null) return null;
+    return _userRepository.getUser(item.authorId!);
+  }
 
   /// Toggles the favorite status of an item for the current user.
   Future<void> toggleFavorite(String itemId) async =>

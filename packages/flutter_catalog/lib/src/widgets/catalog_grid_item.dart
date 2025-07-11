@@ -85,7 +85,7 @@ class CatalogGridItem extends StatelessWidget {
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
-                          author?.name ?? item.authorId ?? "Unknown",
+                          author?.name ?? "Unknown",
                           style: textTheme.bodySmall,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

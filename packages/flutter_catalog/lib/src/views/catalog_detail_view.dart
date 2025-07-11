@@ -37,9 +37,7 @@ class CatalogDetailView extends HookWidget {
 
     // ignore: discarded_futures
     var authorFuture = useMemoized(
-      () async => item.authorId != null
-          ? options.catalogUserRepository.getUser(item.authorId!)
-          : Future.value(null),
+      () async => service.getUserForCatalogItem(item),
       [item.authorId],
     );
 

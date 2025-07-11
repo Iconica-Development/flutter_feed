@@ -231,6 +231,7 @@ class _Body extends HookWidget {
     var localizations = FlutterCatalogLocalizations.of(context)!;
 
     var scope = CatalogScope.of(context);
+    var catalogService = scope.catalogService;
     var filterService = scope.filterService;
     var filtersStream =
         useMemoized(() => filterService.getFiltersWithValues(), []);
@@ -242,28 +243,31 @@ class _Body extends HookWidget {
     var itemsFuture = useMemoized(
       () async {
         if (!filtersSnapshot.hasData) {
-          return scope.catalogService.fetchCatalogItems();
+          return catalogService.fetchCatalogItems();
         }
-        return scope.catalogService.fetchCatalogItems(
+        return catalogService.fetchCatalogItems(
           filters: filtersSnapshot.data!.toSerializedFilterMap(),
         );
       },
       [filtersSnapshot.data],
     );
     var snapshot = useFuture(itemsFuture);
+    var items = snapshot.data;
+    useEffect(
+      () {
+        if (items == null || items.isEmpty) {
+          options.onNoItems?.call();
+        }
+        return;
+      },
+      [],
+    );
 
     // ignore: discarded_futures
     var usersFuture = useMemoized(
       () async {
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-          var authorIds = snapshot.data!
-              .map((item) => item.authorId)
-              .whereType<String>()
-              .toSet()
-              .toList();
-          if (authorIds.isNotEmpty) {
-            return scope.options.catalogUserRepository.getUsers(authorIds);
-          }
+          return catalogService.fetchUsersForItems(snapshot.data!);
         }
         return Future.value(<CatalogUser>[]);
       },
@@ -284,16 +288,6 @@ class _Body extends HookWidget {
           Center(child: Text(localizations.itemLoadingError));
     }
 
-    var items = snapshot.data;
-    useEffect(
-      () {
-        if (items == null || items.isEmpty) {
-          options.onNoItems?.call();
-        }
-        return;
-      },
-      [],
-    );
     if (items == null || items.isEmpty) {
       return builders.noItemsPlaceholderBuilder?.call(context) ??
           Center(child: Text(localizations.noItemsFound));
