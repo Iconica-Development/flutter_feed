@@ -109,7 +109,6 @@ class _PostHeader extends StatelessWidget {
     var deleteItemButtonText = localizationDeleteItemButtonText;
 
     return SizedBox(
-      width: double.infinity,
       height: 40.0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
