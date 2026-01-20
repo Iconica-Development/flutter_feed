@@ -15,4 +15,5 @@ export "src/config/screen_types.dart";
 export "src/flutter_catalog_userstory.dart";
 export "src/repositories/memory_catalog_repository.dart";
 export "src/services/catalog_service.dart";
+export "src/services/pop_handler.dart";
 export "src/utils/scope.dart";
