@@ -18,3 +18,4 @@ export "src/services/catalog_service.dart";
 export "src/services/pop_handler.dart";
 export "src/utils/scope.dart";
 export "src/widgets/catalog_grid_item.dart";
+export "src/views/views.dart";
