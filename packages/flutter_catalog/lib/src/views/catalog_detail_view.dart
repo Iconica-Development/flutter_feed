@@ -144,10 +144,9 @@ class _MyItemDetailBody extends StatelessWidget {
                 _TagsSection(customFields: item.customFields),
                 const SizedBox(height: 24),
               ],
-              if (options.builders.detailPageItemBuilder != null)
-                options.builders.detailPageItemBuilder!(context, item)
-              else
-                _MapSection(),
+              if (options.builders.detailPageItemBuilder != null) ...[
+                options.builders.detailPageItemBuilder!(context, item),
+              ],
               const SizedBox(height: 18),
               _PostedDate(date: item.postedAt),
             ],

@@ -33,7 +33,7 @@ class RestCatalogRepository<T extends CatalogItem>
     this.fetchCatalogItemByIdEndpoint = "/catalog/catalog-items/:id",
     this.toggleFavoriteEndpoint = "/catalog/catalog-items/:itemId/favorite",
     this.createCatalogItemEndpoint = "/catalog/catalog-items",
-    this.uploadImageEndpoint = "/catalog/upload_image",
+    this.uploadImageEndpoint = "/catalog/upload-image",
     this.updateCatalogItemEndpoint = "/catalog/catalog-items/:id",
     this.deleteCatalogItemEndpoint = "/catalog/catalog-items/:id",
   })  : fromJsonFactory = _getFromJsonFactory<T>(fromJsonFactory),
