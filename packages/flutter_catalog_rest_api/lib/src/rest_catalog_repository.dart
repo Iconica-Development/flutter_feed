@@ -167,6 +167,7 @@ class RestCatalogRepository<T extends CatalogItem>
   Future<void> deleteCatalogItem(String itemId) async {
     var deleteEndpoint = _baseEndpoint
         .child(deleteCatalogItemEndpoint)
+        .withConverter(const NoOpConverter())
         .authenticate()
         .withVariables({"id": itemId});
 

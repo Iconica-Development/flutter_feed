@@ -33,31 +33,33 @@ class CatalogGridItem extends StatelessWidget {
       onTap: onTap,
       child: Card(
         clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        elevation: 0,
-        color: colorScheme.surface,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (item.imageUrls.isNotEmpty) ...[
               /// The item image, which expands to fill the available space.
               Expanded(
-                child: CachedNetworkImage(
-                  imageUrl: item.imageUrls.first,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) =>
-                      const Center(child: CircularProgressIndicator.adaptive()),
-                  errorWidget: (context, url, error) =>
-                      const Icon(Icons.broken_image),
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: CachedNetworkImage(
+                      imageUrl: item.imageUrls.first,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.broken_image),
+                    ),
+                  ),
                 ),
               ),
             ],
 
             /// The details section at the bottom of the card.
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0).copyWith(bottom: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

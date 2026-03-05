@@ -51,6 +51,7 @@ class CatalogOverviewView extends HookWidget {
             searchController: searchController,
           )
         : AppBar(
+            leading: onExit != null ? BackButton(onPressed: onExit) : null,
             title: Text(
               options.translations.overviewTitle ?? localizations.overviewTitle,
             ),

@@ -46,7 +46,6 @@ class CatalogModifyView extends HookWidget {
     var scope = CatalogScope.of(context);
     var options = scope.options;
     var localizations = FlutterCatalogLocalizations.of(context)!;
-    var navigator = Navigator.of(context);
 
     // ignore: discarded_futures
     var filtersFuture = useMemoized(() => scope.filterService.getFilters(), []);
@@ -110,11 +109,11 @@ class CatalogModifyView extends HookWidget {
           content: Text(localizations.itemCreatePageDeleteConfirmationMessage),
           actions: [
             TextButton(
-              onPressed: () => navigator.pop(false),
+              onPressed: () => Navigator.of(context).pop(false),
               child: Text(localizations.itemCreatePageDeleteConfirmationCancel),
             ),
             TextButton(
-              onPressed: () => navigator.pop(true),
+              onPressed: () => Navigator.of(context).pop(true),
               child: Text(
                 localizations.itemCreatePageDeleteConfirmationConfirm,
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
