@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: 2025 Iconica
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+include: package:flutter_iconica_analysis/components_options.yaml
+
+analyzer:
+  errors:
+    avoid_equals_and_hash_code_on_mutable_classes: ignore
+
+linter:
+  rules:

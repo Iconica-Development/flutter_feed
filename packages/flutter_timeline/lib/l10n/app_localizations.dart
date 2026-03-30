@@ -59,15 +59,18 @@ import 'app_localizations_en.dart';
 /// be consistent with the languages listed in the FlutterFeedLocalizations.supportedLocales
 /// property.
 abstract class FlutterFeedLocalizations {
-  FlutterFeedLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  FlutterFeedLocalizations(String locale)
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
   static FlutterFeedLocalizations? of(BuildContext context) {
-    return Localizations.of<FlutterFeedLocalizations>(context, FlutterFeedLocalizations);
+    return Localizations.of<FlutterFeedLocalizations>(
+        context, FlutterFeedLocalizations);
   }
 
-  static const LocalizationsDelegate<FlutterFeedLocalizations> delegate = _FlutterFeedLocalizationsDelegate();
+  static const LocalizationsDelegate<FlutterFeedLocalizations> delegate =
+      _FlutterFeedLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -79,7 +82,8 @@ abstract class FlutterFeedLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -87,9 +91,7 @@ abstract class FlutterFeedLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en')
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en')];
 
   /// Label shown when there are no posts to display in a timeline
   ///
@@ -122,33 +124,34 @@ abstract class FlutterFeedLocalizations {
   String timelinePostDetailDate(DateTime date, DateTime time);
 }
 
-class _FlutterFeedLocalizationsDelegate extends LocalizationsDelegate<FlutterFeedLocalizations> {
+class _FlutterFeedLocalizationsDelegate
+    extends LocalizationsDelegate<FlutterFeedLocalizations> {
   const _FlutterFeedLocalizationsDelegate();
 
   @override
   Future<FlutterFeedLocalizations> load(Locale locale) {
-    return SynchronousFuture<FlutterFeedLocalizations>(lookupFlutterFeedLocalizations(locale));
+    return SynchronousFuture<FlutterFeedLocalizations>(
+        lookupFlutterFeedLocalizations(locale));
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['en'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_FlutterFeedLocalizationsDelegate old) => false;
 }
 
 FlutterFeedLocalizations lookupFlutterFeedLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en': return FlutterFeedLocalizationsEn();
+    case 'en':
+      return FlutterFeedLocalizationsEn();
   }
 
   throw FlutterError(
-    'FlutterFeedLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
+      'FlutterFeedLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }
