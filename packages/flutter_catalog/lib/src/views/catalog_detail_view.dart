@@ -1,10 +1,7 @@
 import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
-import "package:flutter_catalog/l10n/app_localizations.dart";
-import "package:flutter_catalog/src/config/screen_types.dart";
-import "package:flutter_catalog/src/utils/scope.dart";
+import "package:flutter_catalog/flutter_catalog.dart";
 import "package:flutter_catalog/src/widgets/image_view_carousel.dart";
-import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:intl/intl.dart";
 
@@ -246,6 +243,14 @@ class _AuthorSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var options = CatalogScope.of(context).options;
+
+    if (options.builders.catalogDetailAuthorSectionBuilder != null) {
+      options.builders.catalogDetailAuthorSectionBuilder!.call(
+        context,
+        CatalogItemDetailAuthorViewModel(author: author, options: options),
+      );
+    }
+
     var localizations = FlutterCatalogLocalizations.of(context)!;
     var textTheme = Theme.of(context).textTheme;
     var backgroundColor = options.theme.authorSectionBackgroundColor ??

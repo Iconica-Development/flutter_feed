@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_catalog/src/config/screen_types.dart";
-import "package:flutter_catalog_interface/flutter_catalog_interface.dart";
+import "package:flutter_catalog/flutter_catalog.dart";
 
 /// A class that holds all the custom UI builders for the catalog user story.
 class CatalogBuilders {
@@ -14,6 +13,7 @@ class CatalogBuilders {
     this.filterSectionBuilder,
     this.detailPageItemBuilder,
     this.primaryButtonBuilder = _defaultPrimaryButtonBuilder,
+    this.catalogDetailAuthorSectionBuilder,
   });
 
   /// A builder for the main screen layout.
@@ -75,6 +75,9 @@ class CatalogBuilders {
         onPressed: isDisabled ? null : onPressed,
         child: child,
       );
+
+  /// Builder used for creating an author section on a catalog detail page
+  final CatalogDetailAuthorSectionBuilder? catalogDetailAuthorSectionBuilder;
 }
 
 /// The base screen builder signature.
@@ -111,4 +114,25 @@ typedef PrimaryButtonBuilder = Widget Function(
 typedef DetailPageItemBuilder = Widget Function(
   BuildContext context,
   CatalogItem item,
+);
+
+/// A viewmodel used to build an author section on a detail page.
+class CatalogItemDetailAuthorViewModel {
+  ///
+  const CatalogItemDetailAuthorViewModel({
+    required this.author,
+    required this.options,
+  });
+
+  /// The author of the post for which this detail page is rendered
+  final CatalogUser? author;
+
+  /// The options for the current catalog scope
+  final CatalogOptions options;
+}
+
+/// Builder used for creating an author section on a catalog detail page
+typedef CatalogDetailAuthorSectionBuilder = Widget Function(
+  BuildContext context,
+  CatalogItemDetailAuthorViewModel viewModel,
 );
