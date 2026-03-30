@@ -245,7 +245,7 @@ class _AuthorSection extends StatelessWidget {
     var options = CatalogScope.of(context).options;
 
     if (options.builders.catalogDetailAuthorSectionBuilder != null) {
-      options.builders.catalogDetailAuthorSectionBuilder!.call(
+      return options.builders.catalogDetailAuthorSectionBuilder!.call(
         context,
         CatalogItemDetailAuthorViewModel(author: author, options: options),
       );
