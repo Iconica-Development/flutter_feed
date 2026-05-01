@@ -6,6 +6,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
+import 'app_localizations_nl.dart';
+
+// ignore_for_file: type=lint
 
 /// Callers can lookup localized strings with an instance of FlutterCatalogLocalizations
 /// returned by `FlutterCatalogLocalizations.of(context)`.
@@ -91,7 +94,10 @@ abstract class FlutterCatalogLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('en')];
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('en'),
+    Locale('nl')
+  ];
 
   /// No description provided for @overviewTitle.
   ///
@@ -298,7 +304,7 @@ class _FlutterCatalogLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en'].contains(locale.languageCode);
+      <String>['en', 'nl'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_FlutterCatalogLocalizationsDelegate old) => false;
@@ -309,6 +315,8 @@ FlutterCatalogLocalizations lookupFlutterCatalogLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'en':
       return FlutterCatalogLocalizationsEn();
+    case 'nl':
+      return FlutterCatalogLocalizationsNl();
   }
 
   throw FlutterError(
