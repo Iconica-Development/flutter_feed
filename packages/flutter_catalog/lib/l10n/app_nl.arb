@@ -1,0 +1,40 @@
+{
+    "@@locale": "nl",
+    "publicUserProfileLoadingError": "Fout bij het laden van gebruikersprofiel",
+    "overviewTitle": "Speelgoed bij jou in de buurt",
+    "filtersTitle": "Filters",
+    "searchHint": "Speelgoed zoeken...",
+    "filterButton": "Filters",
+    "noItemsFound": "Geen speelgoed gevonden.",
+    "itemLoadingError": "Het laden van de items is mislukt.",
+    "detailDescriptionTitle": "Beschrijving",
+    "applyFiltersButton": "Filters toepassen",
+    "sendMessageButton": "Bericht verzenden",
+    "characteristicsTitle": "Kenmerken",
+    "distanceTitle": "Afstand",
+    "postedSince": "Geplaatst sinds {date}",
+    "@postedSince": {
+        "placeholders": {
+            "date": {}
+        }
+    },
+    "editItemButton": "Bewerk",
+    "contactUserDisabledMessage": "U kunt geen contact opnemen met de auteur van dit item.",
+    "itemCreatePageTitle": "Bewerk Item",
+    "priceFree": "Gratis",
+    "itemEditPageTitle": "Bewerk item",
+    "itemCreatePageTitleHint": "Titel",
+    "itemCreatePageDescriptionHint": "Beschrijving",
+    "itemCreatePageTitleRequiredError": "Een titel is verplicht.",
+    "itemCreatePageAddImagesButton": "Afbeeldingen toevoegen",
+    "itemCreatePageSaveChangesButton": "Wijzigingen opslaan",
+    "itemCreatePageSavingChangesButton": "Bezig met opslaan...",
+    "itemCreatePageDeleteItemButton": "Item verwijderen",
+    "itemCreatePageDeleteConfirmationTitle": "Item verwijderen",
+    "itemCreatePageDeleteConfirmationMessage": "Weet je zeker dat je dit item definitief wilt verwijderen?",
+    "itemCreatePageDeleteConfirmationConfirm": "Verwijderen",
+    "itemCreatePageDeleteConfirmationCancel": "Annuleren",
+    "itemCreatePageGenericError": "Er is een fout opgetreden.",
+    "itemCreatePageItemDeletedSuccess": "Het item is succesvol verwijderd.",
+    "itemCreatePageItemDeleteError": "Het item kon niet worden verwijderd."
+}
