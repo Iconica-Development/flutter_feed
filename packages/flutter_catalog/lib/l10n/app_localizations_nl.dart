@@ -1,8 +1,4 @@
-// ignore: unused_import
-import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
-
-// ignore_for_file: type=lint
 
 /// The translations for Dutch Flemish (`nl`).
 class FlutterCatalogLocalizationsNl extends FlutterCatalogLocalizations {
@@ -27,7 +23,7 @@ class FlutterCatalogLocalizationsNl extends FlutterCatalogLocalizations {
   String get itemLoadingError => 'Het laden van de items is mislukt.';
 
   @override
-  String get itemCreatePageMandatorySection => 'Mandatory';
+  String get itemCreatePageMandatorySection => 'Verplicht';
 
   @override
   String get detailDescriptionTitle => 'Beschrijving';
@@ -53,8 +49,7 @@ class FlutterCatalogLocalizationsNl extends FlutterCatalogLocalizations {
   String get editItemButton => 'Bewerk';
 
   @override
-  String get contactUserDisabledMessage =>
-      'U kunt geen contact opnemen met de auteur van dit item.';
+  String get contactUserDisabledMessage => 'U kunt geen contact opnemen met de auteur van dit item.';
 
   @override
   String get itemCreatePageTitle => 'Bewerk Item';
@@ -90,8 +85,7 @@ class FlutterCatalogLocalizationsNl extends FlutterCatalogLocalizations {
   String get itemCreatePageDeleteConfirmationTitle => 'Item verwijderen';
 
   @override
-  String get itemCreatePageDeleteConfirmationMessage =>
-      'Weet je zeker dat je dit item definitief wilt verwijderen?';
+  String get itemCreatePageDeleteConfirmationMessage => 'Weet je zeker dat je dit item definitief wilt verwijderen?';
 
   @override
   String get itemCreatePageDeleteConfirmationConfirm => 'Verwijderen';
@@ -103,10 +97,8 @@ class FlutterCatalogLocalizationsNl extends FlutterCatalogLocalizations {
   String get itemCreatePageGenericError => 'Er is een fout opgetreden.';
 
   @override
-  String get itemCreatePageItemDeletedSuccess =>
-      'Het item is succesvol verwijderd.';
+  String get itemCreatePageItemDeletedSuccess => 'Het item is succesvol verwijderd.';
 
   @override
-  String get itemCreatePageItemDeleteError =>
-      'Het item kon niet worden verwijderd.';
+  String get itemCreatePageItemDeleteError => 'Het item kon niet worden verwijderd.';
 }

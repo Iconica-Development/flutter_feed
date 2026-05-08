@@ -1,12 +1,12 @@
 {
     "@@locale": "nl",
-    "publicUserProfileLoadingError": "Fout bij het laden van gebruikersprofiel",
     "overviewTitle": "Speelgoed bij jou in de buurt",
     "filtersTitle": "Filters",
     "searchHint": "Speelgoed zoeken...",
     "filterButton": "Filters",
     "noItemsFound": "Geen speelgoed gevonden.",
     "itemLoadingError": "Het laden van de items is mislukt.",
+    "itemCreatePageMandatorySection": "Verplicht",
     "detailDescriptionTitle": "Beschrijving",
     "applyFiltersButton": "Filters toepassen",
     "sendMessageButton": "Bericht verzenden",
