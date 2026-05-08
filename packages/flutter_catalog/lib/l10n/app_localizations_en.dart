@@ -1,8 +1,4 @@
-// ignore: unused_import
-import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
-
-// ignore_for_file: type=lint
 
 /// The translations for English (`en`).
 class FlutterCatalogLocalizationsEn extends FlutterCatalogLocalizations {
@@ -53,8 +49,7 @@ class FlutterCatalogLocalizationsEn extends FlutterCatalogLocalizations {
   String get editItemButton => 'Edit';
 
   @override
-  String get contactUserDisabledMessage =>
-      'You cannot contact the author of this item.';
+  String get contactUserDisabledMessage => 'You cannot contact the author of this item.';
 
   @override
   String get itemCreatePageTitle => 'Create Item';
@@ -90,8 +85,7 @@ class FlutterCatalogLocalizationsEn extends FlutterCatalogLocalizations {
   String get itemCreatePageDeleteConfirmationTitle => 'Delete Item';
 
   @override
-  String get itemCreatePageDeleteConfirmationMessage =>
-      'Are you sure you want to delete this item forever?';
+  String get itemCreatePageDeleteConfirmationMessage => 'Are you sure you want to delete this item forever?';
 
   @override
   String get itemCreatePageDeleteConfirmationConfirm => 'Delete';

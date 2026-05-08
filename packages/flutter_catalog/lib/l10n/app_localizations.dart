@@ -8,8 +8,6 @@ import 'package:intl/intl.dart' as intl;
 import 'app_localizations_en.dart';
 import 'app_localizations_nl.dart';
 
-// ignore_for_file: type=lint
-
 /// Callers can lookup localized strings with an instance of FlutterCatalogLocalizations
 /// returned by `FlutterCatalogLocalizations.of(context)`.
 ///
@@ -62,18 +60,15 @@ import 'app_localizations_nl.dart';
 /// be consistent with the languages listed in the FlutterCatalogLocalizations.supportedLocales
 /// property.
 abstract class FlutterCatalogLocalizations {
-  FlutterCatalogLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  FlutterCatalogLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
   static FlutterCatalogLocalizations? of(BuildContext context) {
-    return Localizations.of<FlutterCatalogLocalizations>(
-        context, FlutterCatalogLocalizations);
+    return Localizations.of<FlutterCatalogLocalizations>(context, FlutterCatalogLocalizations);
   }
 
-  static const LocalizationsDelegate<FlutterCatalogLocalizations> delegate =
-      _FlutterCatalogLocalizationsDelegate();
+  static const LocalizationsDelegate<FlutterCatalogLocalizations> delegate = _FlutterCatalogLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -85,8 +80,7 @@ abstract class FlutterCatalogLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -292,36 +286,34 @@ abstract class FlutterCatalogLocalizations {
   String get itemCreatePageItemDeleteError;
 }
 
-class _FlutterCatalogLocalizationsDelegate
-    extends LocalizationsDelegate<FlutterCatalogLocalizations> {
+class _FlutterCatalogLocalizationsDelegate extends LocalizationsDelegate<FlutterCatalogLocalizations> {
   const _FlutterCatalogLocalizationsDelegate();
 
   @override
   Future<FlutterCatalogLocalizations> load(Locale locale) {
-    return SynchronousFuture<FlutterCatalogLocalizations>(
-        lookupFlutterCatalogLocalizations(locale));
+    return SynchronousFuture<FlutterCatalogLocalizations>(lookupFlutterCatalogLocalizations(locale));
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'nl'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'nl'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_FlutterCatalogLocalizationsDelegate old) => false;
 }
 
 FlutterCatalogLocalizations lookupFlutterCatalogLocalizations(Locale locale) {
+
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en':
-      return FlutterCatalogLocalizationsEn();
-    case 'nl':
-      return FlutterCatalogLocalizationsNl();
+    case 'en': return FlutterCatalogLocalizationsEn();
+    case 'nl': return FlutterCatalogLocalizationsNl();
   }
 
   throw FlutterError(
-      'FlutterCatalogLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'FlutterCatalogLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.'
+  );
 }
