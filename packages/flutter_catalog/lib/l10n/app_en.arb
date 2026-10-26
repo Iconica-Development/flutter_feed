@@ -1,0 +1,40 @@
+{
+    "@@locale": "en",
+    "overviewTitle": "Toys near you",
+    "filtersTitle": "Filters",
+    "searchHint": "Find toys...",
+    "filterButton": "Filters",
+    "noItemsFound": "No items found.",
+    "itemLoadingError": "Failed to load items.",
+    "itemCreatePageMandatorySection": "Mandatory",
+    "detailDescriptionTitle": "Description",
+    "applyFiltersButton": "Apply filters",
+    "sendMessageButton": "Send message",
+    "characteristicsTitle": "Characteristics",
+    "distanceTitle": "Distance",
+    "postedSince": "Posted since {date}",
+    "@postedSince": {
+        "placeholders": {
+            "date": {}
+        }
+    },
+    "editItemButton": "Edit",
+    "contactUserDisabledMessage": "You cannot contact the author of this item.",
+    "itemCreatePageTitle": "Create Item",
+    "priceFree": "Free",
+    "itemEditPageTitle": "Edit Item",
+    "itemCreatePageTitleHint": "Title",
+    "itemCreatePageDescriptionHint": "Description",
+    "itemCreatePageTitleRequiredError": "Title is required.",
+    "itemCreatePageAddImagesButton": "Add Images",
+    "itemCreatePageSaveChangesButton": "Save Changes",
+    "itemCreatePageSavingChangesButton": "Saving...",
+    "itemCreatePageDeleteItemButton": "Delete Item",
+    "itemCreatePageDeleteConfirmationTitle": "Delete Item",
+    "itemCreatePageDeleteConfirmationMessage": "Are you sure you want to delete this item forever?",
+    "itemCreatePageDeleteConfirmationConfirm": "Delete",
+    "itemCreatePageDeleteConfirmationCancel": "Cancel",
+    "itemCreatePageGenericError": "An error occurred.",
+    "itemCreatePageItemDeletedSuccess": "Item deleted successfully.",
+    "itemCreatePageItemDeleteError": "Failed to delete item."
+}

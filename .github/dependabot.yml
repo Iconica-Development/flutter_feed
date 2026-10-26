@@ -6,16 +6,41 @@ version: 2
 
 updates:
   - package-ecosystem: "pub"
-    directory: "/packages/flutter_timeline"
+    directory: "/packages/dart_feed_utilities"
     schedule:
       interval: "weekly"
-  
+
   - package-ecosystem: "pub"
-    directory: "/packages/flutter_timeline_interface"
+    directory: "/packages/flutter_catalog"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pub"
+    directory: "/packages/flutter_catalog_interface"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pub"
+    directory: "/packages/flutter_catalog_rest_api"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pub"
+    directory: "/packages/flutter_catalog_riverpod"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "pub"
     directory: "/packages/flutter_feed_utils"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pub"
+    directory: "/packages/flutter_timeline"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pub"
+    directory: "/packages/flutter_timeline_interface"
     schedule:
       interval: "weekly"
