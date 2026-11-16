@@ -16,7 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cached_network_image: ^3.2.2
+  cached_network_image: ">=3.2.2 <5.0.0"
 
 dev_dependencies:
   flutter_iconica_analysis:
